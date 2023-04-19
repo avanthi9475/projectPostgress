@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @officer.email %>
+</p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @officer.name %>
+</p>
+
+<p>
+  <strong>Age:</strong>
+  <%= @officer.age %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @officer.location %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @officer.role %>
+</p>
+
+<%= link_to 'Edit', edit_officer_path(@officer) %> |
+<%= link_to 'Back', officers_path %>

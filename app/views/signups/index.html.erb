@@ -1,0 +1,23 @@
+<h1>Sign Up</h1>
+<form action="/submit" method="post">
+    <input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+
+    <label for="email">Email-id</label>
+    <input type="email" name="user[email]">
+
+    <label for="password">Password</label>
+    <input type="password" name="user[password]">
+
+    <input type="submit" name="submit">
+    <div>
+        <br>
+        <a href="/logins/new">Login</a>
+    </div>
+    <div class="errors">
+        <% if flash[:login_errors]%>
+            <% flash[:login_errors].each do |error|%>
+                <h2 style='color:red;'> <%= error %></h2>
+            <% end %>
+        <% end %>
+    </div>
+</form>

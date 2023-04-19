@@ -1,0 +1,15 @@
+=>rails generate scaffold admin email:string name:string age:integer location:string
+bin/rails db:migrate
+=>rails generate scaffold user email:string name:string age:integer location:string noOfComplaintsMade:integer
+bin/rails db:migrate
+=>rails generate scaffold login email:string password:string role:string logouttime:timestamp
+rails db:migrate
+
+
+to switch to db console:
+rails c
+switch database :
+\c rails_dev
+to list tables : 
+\dt
+
