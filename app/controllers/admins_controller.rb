@@ -1,12 +1,12 @@
 class AdminsController < ApplicationController
   before_action :set_admin, only: %i[ show edit update destroy ]
 
-  # GET /admins or /admins.json
+  # GET /admins
   def index
     @admins = Admin.all
   end
 
-  # GET /admins/1 or /admins/1.json
+  # GET /admins/1 
   def show
   end
 
@@ -19,13 +19,13 @@ class AdminsController < ApplicationController
   def edit
   end
 
-  # POST /admins or /admins.json
+  # POST /admins
   def create
     @admin = Admin.new(admin_params)
 
     respond_to do |format|
       if @admin.save
-        format.html { redirect_to admin_url(@admin), notice: "Admin was successfully created." }
+        format.html { redirect_to admin_url(@admin), notice: "Admin was successfully created." }  
         format.json { render :show, status: :created, location: @admin }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -34,7 +34,7 @@ class AdminsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /admins/1 or /admins/1.json
+  # PATCH/PUT /admins/1
   def update
     respond_to do |format|
       if @admin.update(admin_params)
@@ -47,7 +47,7 @@ class AdminsController < ApplicationController
     end
   end
 
-  # DELETE /admins/1 or /admins/1.json
+  # DELETE /admins/1
   def destroy
     @admin.destroy
 

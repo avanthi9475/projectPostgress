@@ -1,29 +1,35 @@
-<p id="notice"><%= notice %></p>
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Officer</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive">
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Email:</td>
+          <td class="p-4 fs-4"><%= @officer.email %></td>
+        </tr>
 
-<p>
-  <strong>Email:</strong>
-  <%= @officer.email %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Name:</td>
+          <td class="p-4 fs-4"><%= @officer.name %></td>
+        </tr>
 
-<p>
-  <strong>Name:</strong>
-  <%= @officer.name %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Age:</td>
+          <td class="p-4 fs-4"><%= @officer.age %></td>
+        </tr>
 
-<p>
-  <strong>Age:</strong>
-  <%= @officer.age %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Location:</td>
+          <td class="p-4 fs-4"><%= @officer.location %></td>
+        </tr>
 
-<p>
-  <strong>Location:</strong>
-  <%= @officer.location %>
-</p>
-
-<p>
-  <strong>Role:</strong>
-  <%= @officer.role %>
-</p>
-
-<%= link_to 'Edit', edit_officer_path(@officer) %> |
-<%= link_to 'Back', officers_path %>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Role:</td>
+          <td class="p-4 fs-4"><%= @officer.role %></td>
+        </tr>
+      </table>
+      <div class="d-flex pt-4 justify-content-center">
+      <%= link_to 'Edit Details', edit_officer_path(@officer), class: "btn btn-secondary text-light btn-lg mx-5 p-3" %> 
+    </div>
+  <div>
+</div>

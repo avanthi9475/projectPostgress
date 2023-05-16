@@ -1,0 +1,52 @@
+<h2 class="d-flex flex-row fw-bold justify-content-center pt-4 pb-3">Sign up</h2>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <div class="field form-group p-1">
+    <%= f.label :email, class: "form-label fw-bold fs-5"%>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control shadow shadow-sm" %>
+  </div>
+
+  <div class="field form-group p-1">
+    <%= f.label :password, class: "form-label fw-bold fs-5"%>
+    <% if @minimum_password_length %>
+    <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br />
+    <%= f.password_field :password, autocomplete: "new-password" ,  class: "form-control shadow shadow-sm"%>
+  </div>
+
+   <div class="field form-group p-1">
+    <%= f.label :password_confirmation, class: "form-label fw-bold fs-5" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" ,  class: "form-control shadow shadow-sm"%>
+  </div>
+
+  <div class="field form-group">
+    <input type="hidden" name="user_login[role]" value="user"  class="form-control shadow shadow-sm" readonly>
+  </div>
+
+  <div class="field form-group p-1">
+    <label for="user_login[name]" class= "form-label fw-bold fs-5">Name</label>
+    <input type="text" name="user_login[name]"  class="form-control shadow shadow-sm">
+  </div>
+  
+  <div class="field form-group p-1">
+    <label for="user_login[age]" class="form-label fw-bold fs-5">Age</label>
+    <input type="number" name="user_login[age]"  class="form-control shadow shadow-sm">
+  </div>
+
+  <div class="field form-group p-1">
+    <label for="user_login[location]" class="form-label fw-bold fs-5">Location</label>
+    <input type="text" name="user_login[location]"  class="form-control shadow shadow-sm">
+  </div>
+
+  <div class="field">
+    <input type="hidden" name="user_login[noOfComplaintsMade]" value='0'>
+  </div>
+
+  <div class="actions d-flex pt-4 justify-content-center">
+    <%= f.submit "Sign up",   class: "btn btn-info text-light btn-lg mx-5 px-5 mb-2" %>
+  </div>
+<% end %>
+<p class="fs-6">Already Have an account: <%= link_to 'Sign In', new_user_login_session_path, class: 'login-link' %></p>
+

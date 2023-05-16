@@ -1,29 +1,38 @@
-<p id="notice"><%= notice %></p>
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Complaints</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive">
+        <tr>
+          <td class="p-4 fs-4 fw-bold">User:</td>
+          <td class="p-4 fs-4"><%= @complaint.user_id %></td>
+        </tr>
 
-<p>
-  <strong>User:</strong>
-  <%= @complaint.user_id %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Officer:</td>
+          <td class="p-4 fs-4"><%= @complaint.officer_id %></td>
+        </tr>
 
-<p>
-  <strong>Officer:</strong>
-  <%= @complaint.officer_id %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Statement:</td>
+          <td class="p-4 fs-4"><%= @complaint.statement %></td>
+        </tr>
 
-<p>
-  <strong>Statement:</strong>
-  <%= @complaint.statement %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Location:</td>
+          <td class="p-4 fs-4"><%= @complaint.location %></td>
+        </tr>
+        
+       <tr>
+          <td class="p-4 fs-4 fw-bold">Status:</td>
+          <td class="p-4 fs-4"><%= @complaint.status.status %></td>
+        </tr>
 
-<p>
-  <strong>Location:</strong>
-  <%= @complaint.location %>
-</p>
-
-<p>
-  <strong>Datetime:</strong>
-  <%= @complaint.dateTime %>
-</p>
-
-<%= link_to 'Edit', edit_complaint_path(@complaint) %> |
-<%= link_to 'Back', complaints_path %>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Datetime:</td>
+          <td class="p-4 fs-4"><%= @complaint.dateTime %></td>
+        </tr>
+      </table>
+    </div>
+  <div>
+</div>

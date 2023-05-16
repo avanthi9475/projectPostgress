@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-md navbar-side">
+    <div class="text-center p-3">
+        <img src="<%= image_path('profile.png') %>" alt="user profile image" class="img-fluid rounded-circle mb-5 mt-2 p-1 d-none d-md-block shadow">
+        <a href="#" class="navbar-brand mx-0 font-weight-bold text-nowrap"><%= Current.user.name %></a>
+    </div>
+    <ul class="navbar-nav flex-column w-100 justify-content-center">
+                <% if(current_user_login.role =="user") %>
+                    <li class="nav-item p-3">
+                        <a href="<%= new_complaint_path %>" class="nav-link fs-4  <%= 'active' if current_page?(new_complaint_path) %>">Add Complaint</a>
+                    </li>
+                    <li class="nav-item p-3">
+                        <a href="<%= viewMyComplaints_path  %>" class="nav-link fs-4  <%= 'active' if current_page?(viewMyComplaints_path)%>">View Complaints</a>
+                    </li>
+                    <li class="nav-item p-3">
+                        <a href="<%= viewResponse_path %>" class="nav-link fs-4 <%= 'active' if current_page?(viewResponse_path)%>">View Response</a>
+                    </li>
+                <% elsif(current_user_login.role =="officer") %>
+                    <% if(Current.user.role=="DSP") %>
+                        <li class="nav-item p-3">
+                            <a href="<%= officers_path %>" class="nav-link fs-4 <%= 'active' if current_page?( officers_path )%>">Officers</a>
+                        </li>
+                    <% end %>
+                    <li class="nav-item p-3">
+                        <a href="<%= complaints_path  %>" class="nav-link fs-4 <%= 'active' if current_page?(complaints_path)%>">Complaints</a>
+                    </li>
+                    <li class="nav-item p-3">
+                        <a href="<%= users_path %>" class="nav-link fs-4 <%= 'active' if current_page?(users_path)%>">Users</a>
+                    </li>
+                    <li class="nav-item p-3">
+                        <a href="<%= viewRequestMsg_path %>" class="nav-link fs-4 <%= 'active' if current_page?(viewRequestMsg_path)%>">Request Messages</a>
+                    </li>
+                <% elsif(current_user_login.role=="admin") %>
+                    <li class="nav-item p-3">
+                        <a href="<%= users_path %>" class="nav-link fs-4 <%= 'active' if current_page?(users_path)%>">Users</a>
+                    <li class="nav-item p-3">
+                        <a href="<%= officers_path %>" class="nav-link fs-4 <%= 'active' if current_page?(officers_path)%>">Officers</a>
+                    </li>
+                    <li class="nav-item p-3">
+                        <a href="<%= complaints_path %>" class="nav-link fs-4 <%= 'active' if current_page?(complaints_path)%>">Complaints</a>
+                    </li>
+                    <li class="nav-item p-3">
+                        <a href="<%= new_admin_path %>" class="nav-link fs-4 <%= 'active' if current_page?(new_admin_path)%>">Add Admin</a>
+                    </li>
+                <% end %>
+            </ul>
+</nav>

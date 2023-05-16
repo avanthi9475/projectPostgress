@@ -1,0 +1,50 @@
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Respond to Request Message</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="d-flex flex-column justify-content-center px-5 mx-5">
+    <%= form_with(model: @message) do |form| %>
+      <% if @message.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@message.errors.count, "error") %> prohibited this message from being saved:</h2>
+
+          <ul>
+            <% @message.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>New Request Messages
+          </ul>
+        </div>
+      <% end %>
+
+      <% @msg = Message.find_by(id: params[:id]) %>
+      <div class="form-group p-2">
+        <label for="complaint_id" class="form-label fs-5 fw-bold py-2">Complaint ID</label>
+        <input type="integer" name="message[complaint_id]"  class="form-control shadow shadow-sm"  value=<%= @msg.complaint_id %> readonly>
+      </div>
+
+      <div class="form-group p-2">
+        <label for="message_id" class="form-label fs-5 fw-bold py-2">Message ID</label>
+        <input type="integer" name="message[message_id]"  class="form-control shadow shadow-sm"  value=<%= @msg.id %> readonly>
+      </div>
+
+      <div class="form-group p-2">
+        <label for="message_type" class="form-label fs-5 fw-bold py-2">Message Type</label>
+        <input type="integer" name="message[message_type]"  class="form-control shadow shadow-sm"  value="Officer" readonly>
+      </div>
+
+      <div class="form-group p-2">
+        <label for="statement" class="form-label fs-5 fw-bold py-2">Statement</label>
+        <input type="text" name="message[statement]"  class="form-control shadow shadow-sm" >
+      </div>
+
+      <div class="form-group p-2">
+        <label for="dateTime"class="form-label fs-5 fw-bold py-2" >Date & Time</label>
+        <input type="datetime-local" name="message[dateTime]"  class="form-control shadow shadow-sm" >
+      </div>
+
+      <div class="actions form-group d-flex justify-content-center py-4">
+        <%= form.submit "Submit", class: "btn btn-secondary shadow shadow-sm" %>
+      </div>
+    <% end %>
+    </div>
+  </div>
+</div>

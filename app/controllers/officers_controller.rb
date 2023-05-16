@@ -1,12 +1,12 @@
 class OfficersController < ApplicationController
   before_action :set_officer, only: %i[ show edit update destroy ]
 
-  # GET /officers or /officers.json
+  # GET /officers
   def index
     @officers = Officer.all
   end
 
-  # GET /officers/1 or /officers/1.json
+  # GET /officers/1 
   def show
   end
 
@@ -19,12 +19,17 @@ class OfficersController < ApplicationController
   def edit
   end
 
-  # POST /officers or /officers.json
+  def viewRequestMsg
+    @messages =  Current.user.officer_messages.where(message_type: 'User')
+    @messages = @messages.select { |msg| msg.status.status == "Pending" }
+  end
+
+  # POST /officers 
   def create
     @officer = Officer.new(officer_params)
-
+    @login = UserLogin.new(email: params[:officer][:email], password: params[:officer][:password], role: 'officer')
     respond_to do |format|
-      if @officer.save
+      if @officer.save && @login.save
         format.html { redirect_to officer_url(@officer), notice: "Officer was successfully created." }
         format.json { render :show, status: :created, location: @officer }
       else
@@ -34,7 +39,7 @@ class OfficersController < ApplicationController
     end
   end
 
-  # PATCH/PUT /officers/1 or /officers/1.json
+  # PATCH/PUT /officers/1
   def update
     respond_to do |format|
       if @officer.update(officer_params)
@@ -47,7 +52,7 @@ class OfficersController < ApplicationController
     end
   end
 
-  # DELETE /officers/1 or /officers/1.json
+  # DELETE /officers/1 
   def destroy
     @officer.destroy
 

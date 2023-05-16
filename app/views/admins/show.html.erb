@@ -1,24 +1,31 @@
-<p id="notice"><%= notice %></p>
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Admin</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive">
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Email:</td>
+          <td class="p-4 fs-4"><%= @admin.email %></td>
+        </tr>
 
-<p>
-  <strong>Email:</strong>
-  <%= @admin.email %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Name:</td>
+          <td class="p-4 fs-4"><%= @admin.name %></td>
+        </tr>
 
-<p>
-  <strong>Name:</strong>
-  <%= @admin.name %>
-</p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Age:</td>
+          <td class="p-4 fs-4"><%= @admin.age %></td>
+        </tr>
 
-<p>
-  <strong>Age:</strong>
-  <%= @admin.age %>
-</p>
-
-<p>
-  <strong>Location:</strong>
-  <%= @admin.location %>
-</p>
-
-<%= link_to 'Edit', edit_admin_path(@admin) %> |
-<%= link_to 'Back', admins_path %>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Location:</td>
+          <td class="p-4 fs-4"><%= @admin.location %></td>
+        </tr>
+       </table>
+      <div class="d-flex pt-4 justify-content-center">
+      <%= link_to 'Edit Details', edit_admin_path(@admin) , class: "btn btn-secondary text-light btn-lg mx-5 p-3" %> 
+     </div>
+    </div>
+  <div>
+</div>

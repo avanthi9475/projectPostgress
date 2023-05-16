@@ -1,13 +1,18 @@
 class ComplaintsController < ApplicationController
   before_action :set_complaint, only: %i[ show edit update destroy ]
 
-  # GET /complaints or /complaints.json
+  # GET /complaints
   def index
     @complaints = Complaint.all
   end
 
-  # GET /complaints/1 or /complaints/1.json
+  # GET /complaints/1 
   def show
+  end
+
+  def mycomplaints
+    @user = User.find_by(id: Current.user.id)
+    @complaints = @user.complaints
   end
 
   # GET /complaints/new
@@ -19,12 +24,16 @@ class ComplaintsController < ApplicationController
   def edit
   end
 
-  # POST /complaints or /complaints.json
+  # POST /complaints 
   def create
     @complaint = Complaint.new(complaint_params)
+    @status = Status.new({status: "Inprogress"})
+    @complaint.status = @status
+    
+    @user = User.find_by(id: params[:complaint][:user_id])
 
     respond_to do |format|
-      if @complaint.save
+      if @complaint.save && @status.save && @user.update(noOfComplaintsMade: @user.noOfComplaintsMade + 1 )
         format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully created." }
         format.json { render :show, status: :created, location: @complaint }
       else
@@ -34,10 +43,11 @@ class ComplaintsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /complaints/1 or /complaints/1.json
+  # PATCH/PUT /complaints/1 
   def update
     respond_to do |format|
-      if @complaint.update(complaint_params)
+      @status = @complaint.status
+      if @complaint.update(complaint_params) && @status.update(status: params[:complaint][:status])
         format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully updated." }
         format.json { render :show, status: :ok, location: @complaint }
       else
@@ -47,7 +57,7 @@ class ComplaintsController < ApplicationController
     end
   end
 
-  # DELETE /complaints/1 or /complaints/1.json
+  # DELETE /complaints/1 
   def destroy
     @complaint.destroy
 
@@ -67,4 +77,5 @@ class ComplaintsController < ApplicationController
     def complaint_params
       params.require(:complaint).permit(:user_id, :officer_id, :statement, :location, :dateTime)
     end
+
 end

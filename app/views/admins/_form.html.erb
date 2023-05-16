@@ -11,27 +11,27 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :email %>
-    <%= form.text_field :email %>
+  <div class="form-group p-2">
+    <%= form.label :email, class: "form-label fs-5 fw-bold py-2"  %>
+    <%= form.text_field :email, class: "form-control shadow shadow-sm" %>
   </div>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name %>
+  <div class="form-group p-2">
+    <%= form.label :name, class: "form-label fs-5 fw-bold py-2" %>
+    <%= form.text_field :name, class: "form-control shadow shadow-sm" %>
   </div>
 
-  <div class="field">
-    <%= form.label :age %>
-    <%= form.number_field :age %>
+  <div class="form-group p-2">
+    <%= form.label :age, class: "form-label fs-5 fw-bold py-2" %>
+    <%= form.number_field :age, class: "form-control shadow shadow-sm" %>
   </div>
 
-  <div class="field">
-    <%= form.label :location %>
-    <%= form.text_field :location %>
+  <div class="form-group p-2">
+    <%= form.label :location, class: "form-label fw-bold fs-5 py-2" %>
+    <%= form.text_field :location, class: "form-control shadow shadow-sm" %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="form-group d-flex justify-content-center py-4">
+    <%= form.submit "Submit", class: "btn btn-secondary shadow shadow-sm" %>
   </div>
 <% end %>

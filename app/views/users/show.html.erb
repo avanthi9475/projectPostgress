@@ -1,33 +1,36 @@
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">User</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive">
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Email:</td>
+          <td class="p-4 fs-4"><%= @user.email %></td>
+        </tr>
 
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Name:</td>
+          <td class="p-4 fs-4"><%= @user.name %></td>
+        </tr>
 
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Age:</td>
+          <td class="p-4 fs-4"><%= @user.age %></td>
+        </tr>
 
-<p id="notice"><%= notice %></p>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">Location:</td>
+          <td class="p-4 fs-4"><%= @user.location %></td>
+        </tr>
 
-<p>
-  <strong>Email:</strong>
-  <%= Current.user.id %>
-</p>
-
-<p>
-  <strong>Name:</strong>
-  <%= @user.name %>
-</p>
-
-<p>
-  <strong>Age:</strong>
-  <%= @user.age %>
-</p>
-
-<p>
-  <strong>Location:</strong>
-  <%= @user.location %>
-</p>
-
-<p>
-  <strong>Noofcomplaintsmade:</strong>
-  <%= @user.noOfComplaintsMade %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %> |
-<%= link_to 'Add Complaint', new_complaint_path %>
+        <tr>
+          <td class="p-4 fs-4 fw-bold">No Of Complaints Made:</td>
+          <td class="p-4 fs-4"><%= @user.noOfComplaintsMade %></td>
+        </tr>
+      </table>
+      <div class="d-flex pt-4 justify-content-center">
+      <%= link_to 'Edit Details', edit_user_path(@user), class: "btn btn-secondary text-light btn-lg  mx-5 p-3" %>
+      </div>
+    </div>
+  <div>
+</div>

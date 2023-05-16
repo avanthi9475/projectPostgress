@@ -11,32 +11,60 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :user_id , :value => Current.user.id%>
-    <%= form.number_field :user_id %>
+  <% if current_user_login.role=="user"%>
+    <div class="form-group p-2">
+      <label class= "form-label fw-bold fs-5 py-2" for="user_id">User-ID</label>
+      <input class="form-control shadow shadow-sm"  type="number" name="complaint[user_id]" value=<%= complaint.user_id==nil ? Current.user.id : complaint.user_id%> readonly>
+    </div>
+  <% else %>
+    <div class="form-group p-2">
+      <label class= "form-label fw-bold fs-5 py-2" for="user_id">User-ID</label>
+      <input class="form-control shadow shadow-sm"  type="number" name="complaint[user_id]" value=<%= complaint.user_id==nil ? nil : complaint.user_id%>>
+    </div>
+  <% end %>
+
+  <% if current_user_login.role=="admin"%>
+    <div class="form-group p-2">
+      <label class= "form-label fw-bold fs-5 py-2" for="officer_id">Officer-ID</label>
+      <input class="form-control shadow shadow-sm"  type="number" name="complaint[officer_id]" value=1>
+    </div>
+     <div class="form-group p-2">
+      <label class= "form-label fw-bold fs-5 py-2" for="status">Status</label>
+      <input class="form-control shadow shadow-sm"  type="text" name="complaint[status]" value=<% if(complaint.status) %> <%= complaint.status.status %> <% end %>>
+    </div>
+  <% elsif current_user_login.role=="officer" %>
+     <div class="form-group">
+      <input class="form-control shadow shadow-sm"  type="hidden" name="complaint[officer_id]" value=<%= Current.user.id %> readonly>
+    </div>
+     <div class="form-group p-2">
+      <label class= "form-label fw-bold fs-5 py-2" for="status">Status</label>
+      <input class="form-control shadow shadow-sm"  type="text" name="complaint[status]" value=<% if(complaint.status) %> <%= complaint.status.status %> <% end %>>
+    </div>
+  <% else %>
+    <div class="form-group">
+      <input class="form-control shadow shadow-sm"  type="hidden" name="complaint[officer_id]" value=1 readonly>
+    </div>
+    <div class="form-group">
+      <input class="form-control shadow shadow-sm"  type="hidden" name="complaint[status]" value=<% if(complaint.status) %> <%= complaint.status.status %> <% else %> <%= "Inprogress" %> <% end %> readonly>
+    </div>
+  <% end %>
+
+  <div class="form-group p-2">
+    <label class= "form-label fw-bold fs-5 py-2" for="statement">Statement</label>
+    <input class="form-control shadow shadow-sm"  type="text" name="complaint[statement]" value=<%= complaint.statement%> >
   </div>
 
-  <div class="field">
-    <%= form.label :officer_id %>
-    <%= form.number_field :officer_id %>
+  <div class="form-group p-2">
+    <label class= "form-label fw-bold fs-5 py-2" for="location">Location</label>
+    <input class="form-control shadow shadow-sm"  type="text" name="complaint[location]" value=<%= complaint.location%>  >
   </div>
 
-  <div class="field">
-    <%= form.label :statement %>
-    <%= form.text_area :statement %>
+  <div class="form-group p-2">
+    <label class= "form-label fw-bold fs-5 py-2" for="dateTime">Date & Time</label>
+    <input class="form-control shadow shadow-sm"  type="datetime-local" name="complaint[dateTime]" value=<%= complaint.dateTime%>  >
   </div>
 
-  <div class="field">
-    <%= form.label :location %>
-    <%= form.text_field :location %>
-  </div>
-
-  <div class="field">
-    <%= form.label :dateTime %>
-    <%= form.datetime_select :dateTime %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
+  <div class="actions form-group d-flex justify-content-center py-4">
+    <%= form.submit "Submit", class: "btn btn-secondary shadow shadow-sm"%>
   </div>
 <% end %>

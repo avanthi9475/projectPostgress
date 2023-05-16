@@ -1,33 +1,32 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Admins</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Location</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @admins.each do |admin| %>
-      <tr>
-        <td><%= admin.email %></td>
-        <td><%= admin.name %></td>
-        <td><%= admin.age %></td>
-        <td><%= admin.location %></td>
-        <td><%= link_to 'Show', admin %></td>
-        <td><%= link_to 'Edit', edit_admin_path(admin) %></td>
-        <td><%= link_to 'Destroy', admin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Admin', new_admin_path %>
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Admins</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive table-striped">
+        <thead class="thead-dark bg-dark text-light align-text-center">
+          <tr>
+            <th class="p-4 fs-5">Email</th>
+            <th class="p-4 fs-5">Name</th>
+            <th class="p-4 fs-5">Age</th>
+            <th class="p-4 fs-5">Location</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @admins.each do |admin| %>
+            <tr>
+              <td class="p-4 fs-6"><%= admin.email %></td>
+              <td class="p-4 fs-6"><%= admin.name %></td>
+              <td class="p-4 fs-6"><%= admin.age %></td>
+              <td class="p-4 fs-6"><%= admin.location %></td>
+              <td class="p-4 fs-6"><%= link_to 'Show', admin %></td>
+              <td class="p-4 fs-6"><%= link_to 'Edit', edit_admin_path(admin) %></td>
+              <td class="p-4 fs-6"><%= link_to 'Destroy', admin, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <%= link_to 'Add New Admin', new_admin_path , class: "btn btn-secondary text-light btn-lg"%>
+    </div>
+  <div>
+</div>

@@ -1,35 +1,35 @@
-<p id="notice"><%= notice %></p>
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Officers</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive table-striped">
+        <thead class="thead-dark bg-dark text-light align-text-center">
+          <tr>
+            <th class="p-4 fs-5">Email</th>
+            <th class="p-4 fs-5">Name</th>
+            <th class="p-4 fs-5">Age</th>
+            <th class="p-4 fs-5">Location</th>
+            <th class="p-4 fs-5">Role</th>
+            <th colspan="3"></th>
+          </tr>
+        </thead>
 
-<h1>Officers</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>Email</th>
-      <th>Name</th>
-      <th>Age</th>
-      <th>Location</th>
-      <th>Role</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @officers.each do |officer| %>
-      <tr>
-        <td><%= officer.email %></td>
-        <td><%= officer.name %></td>
-        <td><%= officer.age %></td>
-        <td><%= officer.location %></td>
-        <td><%= officer.role %></td>
-        <td><%= link_to 'Show', officer %></td>
-        <td><%= link_to 'Edit', edit_officer_path(officer) %></td>
-        <td><%= link_to 'Destroy', officer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Officer', new_officer_path %>
+        <tbody>
+          <% @officers.each do |officer| %>
+            <tr>
+              <td class="p-4 fs-6"><%= officer.email %></td>
+              <td class="p-4 fs-6"><%= officer.name %></td>
+              <td class="p-4 fs-6"><%= officer.age %></td>
+              <td class="p-4 fs-6"><%= officer.location %></td>
+              <td class="p-4 fs-6"><%= officer.role %></td>
+              <td class="p-4 fs-6"><%= link_to 'Show', officer %></td>
+              <td class="p-4 fs-6"><%= link_to 'Edit', edit_officer_path(officer) %></td>
+              <td class="p-4 fs-6"><%= link_to 'Destroy', officer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%=  link_to 'New Officer', new_officer_path, class: "btn btn-secondary text-light btn-lg"%>
+    </div>
+  <div>
+</div>

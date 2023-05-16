@@ -4,6 +4,7 @@ bin/rails db:migrate
 bin/rails db:migrate
 =>rails generate scaffold login email:string password:string role:string logouttime:timestamp
 rails db:migrate
+=>rails generate scaffold messages comp_id:integer msg_type:string statement:string location:string dateTime:timstamp
 
 
 to switch to db console:
@@ -13,3 +14,26 @@ switch database :
 to list tables : 
 \dt
 
+To set database for the currently created rails application locally
+rails db:setup
+
+to open postgres :
+sudo -u postgres psql
+
+to be done :
+	to change redirection after destroy
+	to work on associations
+	# the dateTime is not displaying in edit
+	# to keep notifications
+	# to change session in views
+	# UI work
+	
+users-name, age, location , noOfComplaints
+officers-name, age, location, role
+admin-name, age, location
+
+
+belongs_to
+has_many
+has_one
+polymorphic
