@@ -1,4 +1,5 @@
 class ComplaintsController < ApplicationController
+
   before_action :set_complaint, only: %i[ show edit update destroy ]
 
   # GET /complaints
@@ -15,6 +16,11 @@ class ComplaintsController < ApplicationController
     @complaints = @user.complaints
   end
 
+  def handledByOfficer
+    @complaint = Complaint.find_by(id: params[:id])
+    @officers = @complaint.officers 
+  end
+
   # GET /complaints/new
   def new
     @complaint = Complaint.new
@@ -27,15 +33,19 @@ class ComplaintsController < ApplicationController
   # POST /complaints 
   def create
     @complaint = Complaint.new(complaint_params)
-    @status = Status.new({status: "Inprogress"})
-    @complaint.status = @status
+    @officer = Officer.find_by(role: 'DSP')
+    @user = User.find_by(id: params[:complaint][:user_id])  
     
-    @user = User.find_by(id: params[:complaint][:user_id])
-
     respond_to do |format|
-      if @complaint.save && @status.save && @user.update(noOfComplaintsMade: @user.noOfComplaintsMade + 1 )
-        format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully created." }
-        format.json { render :show, status: :created, location: @complaint }
+      if @complaint.save && @user.update(noOfComplaintsMade: @user.noOfComplaintsMade + 1 )
+          @officers_complaints = OfficersComplaint.new(officer_id: @officer.id, complaint_id: @complaint.id, IsHead: "Yes")
+          if @officers_complaints.save
+            format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully created." }
+            format.json { render :show, status: :created, location: @complaint }
+          else
+            format.html { render :new, status: :unprocessable_entity }
+            format.json { render json: @complaint.errors, status: :unprocessable_entity }
+          end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @complaint.errors, status: :unprocessable_entity }
@@ -46,8 +56,7 @@ class ComplaintsController < ApplicationController
   # PATCH/PUT /complaints/1 
   def update
     respond_to do |format|
-      @status = @complaint.status
-      if @complaint.update(complaint_params) && @status.update(status: params[:complaint][:status])
+      if @complaint.update(complaint_params)
         format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully updated." }
         format.json { render :show, status: :ok, location: @complaint }
       else
@@ -75,7 +84,8 @@ class ComplaintsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def complaint_params
-      params.require(:complaint).permit(:user_id, :officer_id, :statement, :location, :dateTime)
+      params.require(:complaint).permit(:user_id, :statement, :location, :dateTime)
     end
+
 
 end

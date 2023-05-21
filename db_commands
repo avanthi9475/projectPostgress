@@ -21,8 +21,11 @@ to open postgres :
 sudo -u postgres psql
 
 to be done :
+	assign to a new officer
+	drop downs
 	to change redirection after destroy
 	to work on associations
+	to add status for response message in create controller
 	# the dateTime is not displaying in edit
 	# to keep notifications
 	# to change session in views
@@ -33,7 +36,26 @@ officers-name, age, location, role
 admin-name, age, location
 
 
-belongs_to
-has_many
-has_one
-polymorphic
+# belongs_to
+# has_many
+# has_one
+# polymorphic
+has_and_belongs_to_many - complaints has_many officers and officers has_many complaints
+self join
+has_one_through - 
+
+officer.request_messages
+  Message Load (0.7ms)  SELECT "messages".* FROM "messages" INNER JOIN "complaints" ON "messages"."complaint_id" = "complaints"."id" INNER JOIN "officers_complaints" ON "complaints"."id" = "officers_complaints"."complaint_id" WHERE "officers_complaints"."officer_id" = $1 AND "messages"."message_type" = $2  [["officer_id", 1], ["message_type", "User"]]
+  has_many :request_messages, -> { where(message_type: 'User') }, through: :complaints, source: :messages
+  
+rails generate scaffold complainantProof aadhar_no:integer aadharCardCopy:binary photoCopy:binary
+
+kill rails server -> lsof -wni tcp:3000
+kill -9 PID
+
+
+belongs_to :complaint, foreign_key: 'complaint_id'  
+    has_one :status, as: :statusable, dependent: :destroy
+    has_one_attached :userPhotoCopy
+    has_one_attached :aadharCardCopy
+

@@ -1,0 +1,51 @@
+<%= form_with(model: crime_fir) do |form| %>
+  <% if crime_fir.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(crime_fir.errors.count, "error") %> prohibited this crime_fir from being saved:</h2>
+
+      <ul>
+        <% crime_fir.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if !crime_fir.present?%>
+  <div class="field form-group p-2">
+    <%= form.label :user_id, class: "form-label fw-bold fs-5 py-2"  %>
+    <%= form.number_field :user_id, value: params[:user_id], readonly: true, class: "form-control shadow shadow-sm"  %>
+  </div>
+
+   <div class="field form-group p-2">
+    <%= form.label :complaint_id, class: "form-label fw-bold fs-5 py-2" %>
+    <%= form.number_field :complaint_id, value: params[:complaint_id] , readonly: true , class: "form-control shadow shadow-sm"%>
+  </div>
+  <% end %>
+
+  <div class="field form-group p-2">
+    <%= form.label :under_section, class: "form-label fw-bold fs-5 py-2" %>
+    <%= form.number_field :under_section, class: "form-control shadow shadow-sm"%>
+  </div>
+
+  <div class="field form-group p-2">
+    <%= form.label :crime_category, class: "form-label fw-bold fs-5 py-2" %>
+    <%= form.text_field :crime_category, class: "form-control shadow shadow-sm" %>
+  </div>
+
+  <div class="field form-group p-2">
+    <%= form.label :dateTime_of_crime, class: "form-label fw-bold fs-5 py-2"  %>
+    <%= form.datetime_select :dateTime_of_crime, class: "form-control shadow shadow-sm" %>
+  </div>
+
+  <% if crime_fir.present? && crime_fir.status.present? %>
+  <div class="field form-group p-2">
+    <%= form.label :status, class: "form-label fw-bold fs-5 py-2" %>
+    <%= form.text_field :status, value: crime_fir.status.status, class: "form-control shadow shadow-sm" %>
+  </div>
+  <% end %>
+
+  <div class="actions form-group d-flex justify-content-center py-4">
+    <%= form.submit "Submit", class: "btn btn-secondary shadow shadow-sm" %>
+  </div>
+<% end %>

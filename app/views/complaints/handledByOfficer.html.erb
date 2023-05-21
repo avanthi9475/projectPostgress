@@ -1,0 +1,27 @@
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Handled By Officers</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <div class="px-5 mx-5">
+      <table class="table table-responsive table-striped">
+        <thead class="thead-dark bg-dark text-light align-text-center">
+          <tr>
+            <th class="p-4 fs-5">Officer Name</th>
+            <th class="p-4 fs-5">Officer Role</th>
+            <th class="p-4 fs-5">Head</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <% @officers.each do |officer| %>
+            <tr>
+              <td class="p-4 fs-6"><%= officer.name %></td>
+              <td class="p-4 fs-6"><%= officer.role %></td>
+              <td class="p-4 fs-6"><%= officer.is_head_for_complaint(params[:id]) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+        
+      </table>
+    </div>  
+  <div>
+</div>

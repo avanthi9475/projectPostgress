@@ -1,0 +1,3 @@
+class OfficersComplaint < ApplicationRecord
+
+end

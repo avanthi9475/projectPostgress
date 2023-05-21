@@ -5,5 +5,8 @@ class UserLogin < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable
 
   enum role: { admin: 'admin', user: 'user', officer: 'officer' }
+
+  scope :number_of_users, ->{UserLogin.where(role: 'user')}
+  scope :number_of_officers, ->{UserLogin.where(role: 'officer')}
   
 end

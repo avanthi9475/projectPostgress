@@ -12,7 +12,7 @@
             <% elsif current_user_login.role=="officer"%>
             <a class="nav-link fs-5 px-3 <%= 'active' if current_page?(officer_path(Current.user.id)) %>" href="<%= officer_path(Current.user.id)%>">Profile</a>
             <% elsif current_user_login.role=="admin"%>
-            <a class="nav-link fs-5 px-3 <%= 'active' if current_page?(admin_path(Current.user.id)) %>" href="<%= admin_path(Current.user.id)%>">Profile</a>
+            <a class="nav-link fs-5 px-3 <%= 'active' if current_page?(head_path(Current.user.id)) %>" href="<%= head_path(Current.user.id)%>">Profile</a>
             <% end %>
           </li>
           <li class="nav-item">

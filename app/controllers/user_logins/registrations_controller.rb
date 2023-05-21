@@ -1,5 +1,5 @@
 # app/controllers/registrations_controller.rb
-class RegistrationsController < Devise::RegistrationsController
+class UserLogins::RegistrationsController < Devise::RegistrationsController
     before_action :configure_permitted_parameters, if: :devise_controller?
   
     def configure_permitted_parameters

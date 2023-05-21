@@ -1,5 +1,9 @@
 class Officer < ApplicationRecord
-    has_many :complaints, dependent: :destroy
     has_many :messages, as: :message
-    has_many :officer_messages, source: :messages, through: :complaints, class_name: 'Message'
+    has_and_belongs_to_many :complaints, join_table: :officers_complaints
+    has_many :request_messages, -> { where(message_type: 'User') }, through: :complaints, source: :messages
+
+    def is_head_for_complaint(complaint_id)
+        OfficersComplaint.find_by(complaint_id: complaint_id)&.IsHead
+    end
 end

@@ -7,12 +7,7 @@
           <td class="p-4 fs-4 fw-bold">User:</td>
           <td class="p-4 fs-4"><%= @complaint.user_id %></td>
         </tr>
-
-        <tr>
-          <td class="p-4 fs-4 fw-bold">Officer:</td>
-          <td class="p-4 fs-4"><%= @complaint.officer_id %></td>
-        </tr>
-
+        
         <tr>
           <td class="p-4 fs-4 fw-bold">Statement:</td>
           <td class="p-4 fs-4"><%= @complaint.statement %></td>
@@ -25,7 +20,7 @@
         
        <tr>
           <td class="p-4 fs-4 fw-bold">Status:</td>
-          <td class="p-4 fs-4"><%= @complaint.status.status %></td>
+          <td class="p-4 fs-4"><% if @complaint.status %><%= @complaint.status.status %><% else %><%= "Registered" %><% end %></td>
         </tr>
 
         <tr>

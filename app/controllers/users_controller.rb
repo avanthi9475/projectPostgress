@@ -20,7 +20,7 @@ class UsersController < ApplicationController
   end
 
   def viewResponse
-    @messages = Current.user.user_messages.where(message_type: "Officer")
+    @messages = Current.user.response_messages
   end
 
   # POST /users

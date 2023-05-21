@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user_id: 1
+  under_section: 1
+  crime_category: MyString
+  dateTime_of_crime: 2023-05-20 21:51:19
+
+two:
+  user_id: 1
+  under_section: 1
+  crime_category: MyString
+  dateTime_of_crime: 2023-05-20 21:51:19

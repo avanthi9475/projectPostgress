@@ -20,7 +20,7 @@ class OfficersController < ApplicationController
   end
 
   def viewRequestMsg
-    @messages =  Current.user.officer_messages.where(message_type: 'User')
+    @messages =  Current.user.request_messages                                                                                                         
     @messages = @messages.select { |msg| msg.status.status == "Pending" }
   end
 

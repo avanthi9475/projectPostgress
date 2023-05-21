@@ -21,7 +21,6 @@ class MessagesController < ApplicationController
 
   def respondMsg
     @message = Message.new
-    puts(params[:id])
   end
 
   # POST /messages
@@ -31,7 +30,7 @@ class MessagesController < ApplicationController
       @status = Status.new({status: "Pending"})
       @message.status = @status
     else
-      @msg = Message.find_by(id: params[:message][:message_id])
+      @msg = Message.find_by(id: params[:message][:parent_id])
       @status = @msg.status
       @status.status = "Responded"
     end
@@ -78,6 +77,6 @@ class MessagesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def message_params
-      params.require(:message).permit(:complaint_id, :statement, :dateTime)
+      params.require(:message).permit(:complaint_id, :statement, :dateTime, :parent_id)
     end
 end
