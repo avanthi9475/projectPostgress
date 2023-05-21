@@ -1,13 +1,12 @@
-class MessagesController < ApplicationController
-  before_action :set_message, only: %i[ show edit update destroy ]
+class Api::MessagesController <  Api::ApiController 
 
   # GET /messages
   def index
     @messages = Message.all
-    if @messages
+    if @messages && @messages.size>1
       render json: @messages, status: 200
     else
-      render json: {error: 'Message Not Found'}, status: 404
+      render json: {error: 'You have not received and messages'}, status: 404
     end
   end
 
@@ -23,49 +22,67 @@ class MessagesController < ApplicationController
 
   # POST /messages
   def create
-    @user = User.find_by(id: params[:id])
-    @complaint = Complaint.find_by(id: params[:message][:complaint_id])
-    if @user.present? && @complaint.present?
-      @message = @user.messages.new(message_params)
-      if(@user.role=='user')
-        @status = Status.new({status: "Pending"})
-        @message.status = @status
+    @user = User.find_by(id: params[:user_id])
+    if @user.present?
+      @login = UserLogin.find_by(email: @user.email)
+      if @login.present?
+        @message = @user.messages.new(message_params)
+        if(@login.role=='user')
+          @status = Status.new({status: "Pending"})
+          @message.status = @status
+        else
+          @msg = Message.find_by(id: params[:message][:parent_id])
+          @status = @msg.status
+          @status.status = "Responded"
+        end
+        if @message.save && (@login.role=='user' || @status.save)
+          render json: @message, status: 200
+        else
+          render json: {error: @message.errors.full_messages}, status: 404
+        end
       else
-        @msg = Message.find_by(id: params[:message][:parent_id])
-        @status = @msg.status
-        @status.status = "Responded"
-      end
-      if @message.save && (current_user_login.role=='user' || @status.save)
-        render json: @message, status: 200
-      else
-        render json: {error: @message.errors.full_messages}, status: 404
+        render json: {error: 'User not found'}, status: 404
       end
     else
-      render json: {error: 'User Not Found'}, status: 404
+      render json: {error: 'User not found'}, status: 404
     end
   end
 
   # PATCH/PUT /messages/1
   def update
-    respond_to do |format|
-      if @message.update(message_params)
-        format.html { redirect_to message_url(@message), notice: "Message was successfully updated." }
-        format.json { render :show, status: :ok, location: @message }
+    @message = Message.find_by(id: params[:id].to_i)
+    if @message.present?
+      if params[:message][:complaint_id]!=nil 
+        render json: {error: 'Complaint ID cannot be updated'}, status: 404
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
+        if params[:message][:statement]!=nil 
+          @message.statement =params[:message][:statement]
+        end
+        if params[:message][:dateTime]!=nil 
+          @message.dateTime = params[:message][:dateTime]
+        end
+        if @message.save
+          render json: @message, status: 200
+        else
+          render json: {error: @message.errors.full_messages}, status: 404
+        end
       end
+    else
+      render json: {error: 'Message not found'}, status: 404
     end
   end
 
   # DELETE /messages/1
   def destroy
-
-    @message.destroy
-
-    respond_to do |format|
-      format.html { redirect_to messages_url, notice: "Message was successfully destroyed." }
-      format.json { head :no_content }
+    @message = Message.find_by(id: params[:id].to_i)
+    if @message.present?
+      if @message.destroy
+        render json: {message: 'Message was deleted successfully'}, status: 200
+      else
+        render json: {error: @message.errors.full_messages}, status: 404
+      end
+    else
+      render json: {error: 'Message not found'}, status: 404
     end
   end
 

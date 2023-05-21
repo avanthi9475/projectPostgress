@@ -51,10 +51,8 @@ class Api::ComplaintsController < Api::ApiController
   def create
     @complaint = Complaint.new(complaint_params)
     @officer = Officer.find_by(role: 'DSP')
-    @status = Status.new({status: "Inprogress"})
-    @complaint.status = @status
     @user = User.find_by(id: params[:complaint][:user_id])
-    if @user && @complaint.save &&  @status.save && @user.update(noOfComplaintsMade: @user.noOfComplaintsMade + 1 )
+    if @user && @complaint.save && @user.update(noOfComplaintsMade: @user.noOfComplaintsMade + 1 )
         @officers_complaints = OfficersComplaint.new(officer_id: @officer.id, complaint_id: @complaint.id, IsHead: "Yes")
         if @officers_complaints.save
           render json: @complaint, status: 200

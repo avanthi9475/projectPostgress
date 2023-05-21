@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :crime_firs
-  resources :feedbacks
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
   devise_for :user_logins,  controllers: { registrations: 'user_logins/registrations' , sessions: 'user_logins/sessions'}
@@ -42,6 +41,7 @@ Rails.application.routes.draw do
     resources :officers
     resources :users
     resources :heads
+    resources :crime_firs
 
     devise_scope :user_login do
       root to: 'sessions#new'

@@ -92,8 +92,7 @@ class Api::OfficersController < Api::ApiController
   end
 
   private
-
-    # Only allow a list of trusted parameters through.
+  
     def officer_params
       params.require(:officer).permit(:email, :name, :age, :location, :role)
     end

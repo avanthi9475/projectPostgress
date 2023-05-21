@@ -4,7 +4,7 @@ module Api
       respond_to :json
       skip_before_action :verify_authenticity_token
       # before_action :current_user
-      # helper method to access the current user from the doorkeeper token
+      # helper method to access the current user from the doorkeeper
 
     #   def current_user
     #     # p doorkeeper_token

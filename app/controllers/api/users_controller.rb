@@ -53,7 +53,6 @@ class Api::UsersController < Api::ApiController
     end
   end
 
-  # PATCH/PUT /users/1 
   def update
     @user = User.find_by(id: params[:id])
     if(params[:user][:email]==nil)
