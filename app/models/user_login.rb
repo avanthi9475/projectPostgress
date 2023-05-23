@@ -4,6 +4,13 @@ class UserLogin < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable, :trackable
 
+  def self.authenticate(email,password)
+    user = UserLogin.find_for_authentication(email: email)
+    user&.valid_password?(password) ? user : nil
+  end
+
+  validates :email, format: URI::MailTo::EMAIL_REGEXP
+
   enum role: { admin: 'admin', user: 'user', officer: 'officer' }
 
   scope :number_of_users, ->{UserLogin.where(role: 'user')}

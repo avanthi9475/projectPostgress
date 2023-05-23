@@ -1,5 +1,5 @@
 class Status < ApplicationRecord
-    belongs_to :statusable, polymorphic: true, dependent: :destroy
+    belongs_to :statusable, polymorphic: true
 
     scope :complaint_statuses, ->{Status.where(statuses: {statusable_type: 'Complaint'})}
     scope :request_message_statuses, ->{Status.where(statuses: {statusable_type: 'Message'}).where(statuses: {status: ['Pending','Responded']})}

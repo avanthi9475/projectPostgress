@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+  use_doorkeeper
   resources :crime_firs
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
@@ -27,9 +29,15 @@ Rails.application.routes.draw do
   get '/viewResponse' => "users#viewResponse"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
+  scope :api do
+    use_doorkeeper do
+        skip_controllers :applications, :authorizations, :authorized_applications
+    end
+  end
 
-
-
+  use_doorkeeper do
+    skip_controllers :authorizations, :authorized_applications
+  end
 
   namespace :api ,default: {format: :json} do
     devise_for :admin_users, ActiveAdmin::Devise.config

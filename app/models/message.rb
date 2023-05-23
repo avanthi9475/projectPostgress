@@ -1,9 +1,9 @@
 class Message < ApplicationRecord
-    belongs_to :message, polymorphic: true, dependent: :destroy
-    belongs_to :complaint, foreign_key: 'complaint_id', dependent: :destroy
+    belongs_to :message, polymorphic: true
+    belongs_to :complaint, foreign_key: 'complaint_id'
     has_one :status, as: :statusable, dependent: :destroy
-    belongs_to :request, class_name: 'Message', optional: true, dependent: :destroy
-    has_one :response, class_name: 'Message', foreign_key: 'parent_id'
+    belongs_to :request, class_name: 'Message', optional: true
+    has_one :response, class_name: 'Message', foreign_key: 'parent_id', dependent: :destroy
     
 
     scope :request_messages, ->{Message.where(message_type: 'User')}
