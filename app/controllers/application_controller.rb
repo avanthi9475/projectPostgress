@@ -12,4 +12,10 @@ class ApplicationController < ActionController::Base
         end
     end    
 
+    def redirect_user(msg)
+        respond_to do |format|
+            format.html { redirect_to Current.user, alert: msg }
+        end
+    end
+
 end

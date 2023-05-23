@@ -20,7 +20,7 @@
               <td class="p-4 fs-6"><%= complaint.user_id %></td>
               <td class="p-4 fs-6"><%= complaint.statement %></td>
               <td class="p-4 fs-6"><%= complaint.location %></td>
-              <td class="p-4 fs-6"><%= complaint.status.status %></td>
+              <td class="p-4 fs-6"><% if complaint.status %><%= complaint.status.status %><% else %><%= "Registered" %><% end %></td>
               <td class="p-4 fs-6"><%= complaint.dateTime %></td>
               <td><a href="handledByOfficer/<%= complaint.id %>">Handled By</a></td>
               <td><%= link_to 'Make Request', new_message_path(complaint_id: complaint.id)%></td>

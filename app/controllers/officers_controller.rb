@@ -1,27 +1,46 @@
 class OfficersController < ApplicationController
+  before_action :authenticate_user_login!
   before_action :set_officer, only: %i[ show edit update destroy ]
 
   # GET /officers
   def index
-    @officers = Officer.all
+    if current_user_login.role=='officer' && Current.user.role=='DSP'
+      @officers = Officer.all
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # GET /officers/1 
   def show
+    unless current_user_login.role=='officer' && ((Current.user.role=='DSP') || (Current.user.id==params[:id].to_i))
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # GET /officers/new
   def new
-    @officer = Officer.new
+    unless current_user_login.role=='officer' && Current.user.role=='DSP'
+      redirect_user("Unauthorized Access")
+    else
+      @officer = Officer.new
+    end
   end
 
-  # GET /officers/1/edit
+  # GET /officers/1/edit  
   def edit
+    unless current_user_login.role=='officer' && ((Current.user.role=='DSP') || (Current.user.id==params[:id].to_i))
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def viewRequestMsg
-    @messages =  Current.user.request_messages                                                                                                         
-    @messages = @messages.select { |msg| msg.status.status == "Pending" }
+    if current_user_login.role=='officer'
+      @messages =  Current.user.request_messages                                                                                                         
+      @messages = @messages.select { |msg| msg.status.status == "Pending" }
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # POST /officers 
@@ -65,7 +84,10 @@ class OfficersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_officer
-      @officer = Officer.find(params[:id])
+      @officer = Officer.find_by(id: params[:id])
+      unless @officer 
+        redirect_user("Invalid Officer ID")
+      end
     end
 
     # Only allow a list of trusted parameters through.

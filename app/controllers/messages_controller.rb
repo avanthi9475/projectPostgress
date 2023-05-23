@@ -1,13 +1,23 @@
 class MessagesController < ApplicationController
+  before_action :authenticate_user_login!
   before_action :set_message, only: %i[ show edit update destroy ]
 
   # GET /messages
   def index
-    @messages = Message.all
+    if Current.user && current_user_login.role=='officer' && Current.user.role=='DSP'
+      @messages = Message.all
+    elsif Current.user
+      @messages = Current.user.messages
+    end
   end
 
   # GET /messages/1
   def show
+    @message = Message.find_by(id: params[:id])
+    @messages = Current.user.messages
+    unless ((current_user_login.role=='officer' && Current.user.role=='DSP') || (@messages.size>=1 && @messages.include?(@message)))
+      redirect_user("Unauthorized Access")
+    end 
   end
 
   # GET /messages/new
@@ -17,10 +27,24 @@ class MessagesController < ApplicationController
 
   # GET /messages/1/edit
   def edit
+    @message = Message.find_by(id: params[:id])
+    @messages = Current.user.messages
+    unless ((current_user_login.role=='officer' && Current.user.role=='DSP') || (@messages.size>=1 && @messages.include?(@message)))
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def respondMsg
-    @message = Message.new
+    @message = Message.find_by(id: params[:id])
+    if @message
+      if current_user_login.role=='officer'
+        @message = Message.new
+      else
+        redirect_user("Unauthorized Access")
+      end
+    else
+      redirect_user("Invalid Message ID")
+    end
   end
 
   # POST /messages
@@ -72,7 +96,10 @@ class MessagesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_message
-      @message = Message.find(params[:id])
+      @message = Message.find_by(id: params[:id])
+      unless @message 
+        redirect_user("Invalid Message ID")
+      end
     end
 
     # Only allow a list of trusted parameters through.

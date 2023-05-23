@@ -49,7 +49,9 @@ class Api::MessagesController <  Api::ApiController
   def create
     if current_user.present? && current_userlogin.present?
       @message = current_userlogin.messages.new(message_params)
-      if @message.present?
+      @complaint = Complaint.find_by(id: params[:message][:complaint_id])
+      @complaints = current_userlogin.complaints
+      if @message.present? && @complaints.include?(@complaint)
         if(current_user.role=='user')
           @status = Status.new({status: "Pending"})
           @message.status = @status
@@ -73,7 +75,7 @@ class Api::MessagesController <  Api::ApiController
           end
         end
       else
-        render json: {error: 'Message cannot be created'}, status: 404
+        render json: {error: 'Complaint Does not exist'}, status: 404
       end
     else
       render json: {error: 'Restricted Access'}, status: 404

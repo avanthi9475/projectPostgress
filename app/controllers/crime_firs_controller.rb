@@ -1,19 +1,57 @@
 class CrimeFirsController < ApplicationController
-
+  before_action :authenticate_user_login!
   before_action :set_complaint, only: %i[ show edit update destroy ]
 
   def index
-    @crime_firs = CrimeFir.all
+    if current_user_login.present? && current_user_login.role=='officer'
+      if Current.user.role=='DSP'
+        @crime_firs = CrimeFir.all
+      else
+        @crime_firs = Current.user.crime_firs
+      end
+    else
+      redirect_user("Unauthorized Access")
+    end
   end 
 
   def show
+    if current_user_login.present? && current_user_login.role=='officer'
+      @crime_fir = CrimeFir.find_by(id: params[:id])
+      @crime_firs = Current.user.crime_firs
+      if @crime_fir
+        unless ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) && (@current_user_login.role && Current.user.role=='DSP'))
+          redirect_user("Unauthorized Access")
+        end
+      else
+        redirect_user("Invalid FIR Id")
+      end
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def new 
-    @crime_fir = CrimeFir.new
+    if current_user_login.present? && current_user_login.role=='officer'
+      @crime_fir = CrimeFir.new
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def edit
+    if current_user_login.present? && current_user_login.role=='officer'
+      @crime_fir = CrimeFir.find_by(id: params[:id])
+      @crime_firs = Current.user.crime_firs
+      if @crime_fir
+        unless ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) && (@current_user_login.role && Current.user.role=='DSP'))
+          redirect_user("Unauthorized Access")
+        end
+      else
+        redirect_user("Invalid FIR Id")
+      end 
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def create
@@ -58,7 +96,10 @@ class CrimeFirsController < ApplicationController
   private
 
   def set_complaint
-    @crime_fir = CrimeFir.find(params[:id])
+    @crime_fir = CrimeFir.find_by(id: params[:id])
+    unless @crime_fir 
+      redirect_user("Invalid FIR Id")
+    end
   end
 
     def crime_fir_params

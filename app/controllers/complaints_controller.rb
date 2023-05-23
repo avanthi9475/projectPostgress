@@ -1,24 +1,48 @@
 class ComplaintsController < ApplicationController
-
   before_action :set_complaint, only: %i[ show edit update destroy ]
+  before_action :authenticate_user_login!
 
   # GET /complaints
   def index
-    @complaints = Complaint.all
+    if current_user_login.role=='officer' && Current.user.role=='DSP'
+      @complaints = Complaint.all
+    elsif current_user_login.role=='officer'
+      @complaints = Current.user.complaints
+    elsif current_user_login.role=='user'
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # GET /complaints/1 
   def show
+    @complaint = Complaint.find_by(id: params[:id])
+    @complaints = Current.user.complaints
+    unless @complaints && @complaints.include?(@complaint)
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def mycomplaints
-    @user = User.find_by(id: Current.user.id)
-    @complaints = @user.complaints
+    if current_user_login.role=='user'
+      @user = User.find_by(id: Current.user.id)
+      @complaints = @user.complaints
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   def handledByOfficer
     @complaint = Complaint.find_by(id: params[:id])
-    @officers = @complaint.officers 
+    @complaints = Current.user.complaints
+    if @complaint
+      unless ((@complaints && @complaints.include?(@complaint)) || (@current_user_login.role=='officer' && Current.user.role=='DSP'))
+        redirect_user("Unauthorized Access")
+      else
+        @officers = @complaint.officers 
+      end
+    else
+      redirect_user("Invalid ID")
+    end
   end
 
   # GET /complaints/new
@@ -28,6 +52,11 @@ class ComplaintsController < ApplicationController
 
   # GET /complaints/1/edit
   def edit
+    @complaint = Complaint.find_by(id: params[:id])
+    @complaints = Current.user.complaints
+    unless @complaints && @complaints.include?(@complaint)
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # POST /complaints 
@@ -79,7 +108,10 @@ class ComplaintsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_complaint
-      @complaint = Complaint.find(params[:id])
+      @complaint = Complaint.find_by(id: params[:id])
+      unless @complaint 
+        redirect_user("Invalid Complaint ID")
+      end
     end
 
     # Only allow a list of trusted parameters through.

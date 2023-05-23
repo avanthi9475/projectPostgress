@@ -1,13 +1,31 @@
 class UsersController < ApplicationController
+  before_action :authenticate_user_login!
   before_action :set_user, only: %i[ show edit update destroy ]
 
   # GET /users
   def index
-    @users = User.all
+    if current_user_login.role=='officer' && Current.user.role=='DSP'
+      @users = User.all
+    elsif current_user_login.role=='officer'
+      @users = Current.user.users
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # GET /users/1 
   def show
+    @user = User.find_by(id: params[:id])
+    if current_user_login.role=='officer'
+      @users = Current.user.users
+      unless @users.include?(@user) || Current.user.role=='DSP'
+        redirect_user("Unauthorized Access")
+      end
+    else
+      unless @user.id == Current.user.id
+        redirect_user("Unauthorized Access")
+      end
+    end
   end
 
   # GET /users/new
@@ -17,10 +35,25 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    @user = User.find_by(id: params[:id])
+    if current_user_login.role=='officer'
+      @users = Current.user.users
+      unless @users.include?(@user) || Current.user.role=='DSP'
+        redirect_user("Unauthorized Access")
+      end
+    else
+      unless @user.id == Current.user.id
+        redirect_user("Unauthorized Access")
+      end
+    end
   end
 
   def viewResponse
-    @messages = Current.user.response_messages
+    if current_user_login.role=='user'
+      @messages = Current.user.response_messages
+    else
+      redirect_user("Unauthorized Access")
+    end
   end
 
   # POST /users
@@ -65,7 +98,10 @@ class UsersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
-      @user = User.find(params[:id])
+      @user = User.find_by(id: params[:id])
+      unless @user 
+        redirect_user("Invalid User ID")
+      end
     end
 
     # Only allow a list of trusted parameters through.
