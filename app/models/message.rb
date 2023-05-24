@@ -5,6 +5,8 @@ class Message < ApplicationRecord
     belongs_to :request, class_name: 'Message', optional: true
     has_one :response, class_name: 'Message', foreign_key: 'parent_id', dependent: :destroy
     
+    validates :complaint_id, presence: true
+    validates :statement, presence: true
 
     scope :request_messages, ->{Message.where(message_type: 'User')}
     scope :response_messages, ->{Message.where(message_type: 'Officer')}

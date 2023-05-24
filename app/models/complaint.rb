@@ -5,7 +5,9 @@ class Complaint < ApplicationRecord
     has_and_belongs_to_many :officers, join_table: :officers_complaints
     has_one :status, through: :crime_fir, dependent: :destroy
     has_one :lead_officer, class_name: 'Officer', foreign_key: 'id', primary_key: 'leadOfficerID', dependent: :destroy
+
+    validates :user_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
+    validates :statement, presence: true
+    validates :location, presence: true, format: { with: /\A[a-zA-Z]+\z/ }
     
-    # scope :inprogress, -> {Complaint.joins(:status).where(statuses: {status: 'Inprogress'})}
-    # scope :resolved, -> {Complaint.joins(:status).where(statuses: {status: 'Resolved'})}
 end 
