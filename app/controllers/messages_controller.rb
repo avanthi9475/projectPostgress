@@ -72,14 +72,20 @@ class MessagesController < ApplicationController
 
   # PATCH/PUT /messages/1
   def update
-    respond_to do |format|
-      if @message.update(message_params)
-        format.html { redirect_to message_url(@message), notice: "Message was successfully updated." }
-        format.json { render :show, status: :ok, location: @message }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @message.errors, status: :unprocessable_entity }
+    @message = Message.find_by(id: params[:id])
+    @messages = Current.user.messages
+    if ((current_user_login.role=='officer' && Current.user.role=='DSP') || (@messages.size>=1 && @messages.include?(@message)))
+      respond_to do |format|
+        if @message.update(message_params)
+          format.html { redirect_to message_url(@message), notice: "Message was successfully updated." }
+          format.json { render :show, status: :ok, location: @message }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @message.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_user("Unauthorized Access")
     end
   end
 

@@ -7,24 +7,24 @@ class Api::OfficersController < Api::ApiController
       if @officers && @officers.size>=1
         render json: @officers, status: 200
       else
-        render json: {error: 'Officer Not Found'}, status: 404
+        render json: {error: 'Officer Not Found'}, status: 204
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
   # GET /officers/1 
   def show
-    if current_user.present? && current_user.role=='officer' && ((current_userlogin.role=='DSP') || (current_userlogin.present? && current_userlogin.id==params[:id].to_i))
+    if current_user.present? && current_user.role=='officer' && ((current_userlogin.role=='DSP') || (current_userlogin.present? && current_userlogin.id==params[:id]))
       @officer = Officer.find_by(id: params[:id].to_i)
       if @officer 
         render json: @officer, status: 200
       else
-        render json: {error: 'Officer Not Found'}, status: 404
+        render json: {error: 'Officer Not Found'}, status: 204
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
@@ -35,10 +35,10 @@ class Api::OfficersController < Api::ApiController
       if @messages && @messages.size>=1
         render json: @messages, status: 200
       else
-        render json: 'You Have Not Received Any Request Messages', status: 404
+        render json: 'You Have Not Received Any Request Messages', status: 204
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
@@ -50,10 +50,10 @@ class Api::OfficersController < Api::ApiController
       if @login.save && @officer.save
         render json: @officer, status: 200
       else
-        render json: {error: @login.errors.full_messages}, status: 404
+        render json: {error: @login.errors.full_messages}, status: 403
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
@@ -78,16 +78,16 @@ class Api::OfficersController < Api::ApiController
           if @officer.save
             render json: @officer, status: 200
           else
-            render json: {error: @login.errors.full_messages}, status: 404
+            render json: {error: @login.errors.full_messages}, status: 403
           end
         else
-          render json: {error: 'Officer does not exist'}, status: 403
+          render json: {error: 'Officer does not exist'}, status: 204
         end
       else
         render json: {error: 'Email ID cannot be changed'}, status: 403
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
@@ -99,14 +99,14 @@ class Api::OfficersController < Api::ApiController
         if @officer.destroy
           render json: { message: "Officer deleted successfully" } , status: 200
         else
-          render json: {error: @officer.errors.full_messages} , status: 404
+          render json: {error: @officer.errors.full_messages} , status: 403
 
         end
       else
-        render json: {error: 'Officer does not exist'}, status: 403
+        render json: {error: 'Officer does not exist'}, status: 204
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 

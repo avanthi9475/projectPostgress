@@ -19,7 +19,7 @@ class CrimeFirsController < ApplicationController
       @crime_fir = CrimeFir.find_by(id: params[:id])
       @crime_firs = Current.user.crime_firs
       if @crime_fir
-        unless ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) && (@current_user_login.role && Current.user.role=='DSP'))
+        unless ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) || (@current_user_login.role && Current.user.role=='DSP'))
           redirect_user("Unauthorized Access")
         end
       else
@@ -43,7 +43,7 @@ class CrimeFirsController < ApplicationController
       @crime_fir = CrimeFir.find_by(id: params[:id])
       @crime_firs = Current.user.crime_firs
       if @crime_fir
-        unless ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) && (@current_user_login.role && Current.user.role=='DSP'))
+        unless ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) || (@current_user_login.role && Current.user.role=='DSP'))
           redirect_user("Unauthorized Access")
         end
       else
@@ -55,32 +55,44 @@ class CrimeFirsController < ApplicationController
   end
 
   def create
-    @crime_fir = CrimeFir.new(crime_fir_params)
-    @status = Status.new({status: "Inprogress"})
-    @crime_fir.status = @status
+    if current_user_login.present? && current_user_login.role=='officer'
+      @crime_fir = CrimeFir.new(crime_fir_params)
 
-    respond_to do |format|
-      if @crime_fir.save &&  @status.save 
-        format.html { redirect_to crime_fir_url(@crime_fir), notice: "FIR Record was successfully created." }
-        format.json { render :show, status: :created, location: @crime_fir }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @complaint.errors, status: :unprocessable_entity }
+      respond_to do |format|
+        if @crime_fir.save
+          format.html { redirect_to crime_fir_url(@crime_fir), notice: "FIR Record was successfully created." }
+          format.json { render :show, status: :created, location: @crime_fir }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @complaint.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_user("Unauthorized Access")
     end
   end 
 
   def update
-    respond_to do |format|
-      @status = @crime_fir.status
-      @status.status = params[:crime_fir][:status]
-      if @crime_fir.update(crime_fir_params) && @status.save
-        format.html { redirect_to crime_fir_url(@crime_fir), notice: "FIR Record was successfully updated." }
-        format.json { render :show, status: :ok, location: @crime_fir }
+    if current_user_login.present? && current_user_login.role=='officer'
+      @crime_fir = CrimeFir.find_by(id: params[:id])
+      @crime_firs = Current.user.crime_firs
+      if ((@crime_firs.size>=1 && @crime_firs.include?(@crime_fir)) || (@current_user_login.role && Current.user.role=='DSP'))
+        respond_to do |format|
+          @status = @crime_fir.status
+          @status.status = params[:crime_fir][:status]
+          if @crime_fir.update(crime_fir_params) && @status.save
+            format.html { redirect_to crime_fir_url(@crime_fir), notice: "FIR Record was successfully updated." }
+            format.json { render :show, status: :ok, location: @crime_fir }
+          else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @crime_fir.errors, status: :unprocessable_entity }
+          end
+        end
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @crime_fir.errors, status: :unprocessable_entity }
+        redirect_user("unauthorized Access")
       end
+    else
+      redirect_user("unauthorized Access")
     end
   end
 

@@ -17,7 +17,7 @@ class ComplaintsController < ApplicationController
   def show
     @complaint = Complaint.find_by(id: params[:id])
     @complaints = Current.user.complaints
-    unless @complaints && @complaints.include?(@complaint)
+    unless @complaints && @complaints.include?(@complaint) || (current_user_login.role=='officer' && Current.user.role=='DSP')
       redirect_user("Unauthorized Access")
     end
   end
@@ -54,11 +54,11 @@ class ComplaintsController < ApplicationController
   def edit
     @complaint = Complaint.find_by(id: params[:id])
     @complaints = Current.user.complaints
-    unless @complaints && @complaints.include?(@complaint)
+    unless ((@complaints && @complaints.include?(@complaint)) || (@current_user_login.role=='officer' && Current.user.role=='DSP'))
       redirect_user("Unauthorized Access")
     end
   end
-
+ 
   # POST /complaints 
   def create
     @complaint = Complaint.new(complaint_params)
@@ -84,14 +84,20 @@ class ComplaintsController < ApplicationController
 
   # PATCH/PUT /complaints/1 
   def update
-    respond_to do |format|
-      if @complaint.update(complaint_params)
-        format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully updated." }
-        format.json { render :show, status: :ok, location: @complaint }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @complaint.errors, status: :unprocessable_entity }
+    @complaint = Complaint.find_by(id: params[:id])
+    @complaints = Current.user.complaints
+    if @complaints && @complaints.include?(@complaint) || (current_user_login.role=='officer' && Current.user.role=='DSP')
+      respond_to do |format|
+        if @complaint.update(complaint_params)
+          format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully updated." }
+          format.json { render :show, status: :ok, location: @complaint }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @complaint.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_user("Unauthorized Access")
     end
   end
 

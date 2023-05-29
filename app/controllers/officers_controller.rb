@@ -45,29 +45,37 @@ class OfficersController < ApplicationController
 
   # POST /officers 
   def create
-    @officer = Officer.new(officer_params)
-    @login = UserLogin.new(email: params[:officer][:email], password: params[:officer][:password], role: 'officer')
-    respond_to do |format|
-      if @officer.save && @login.save
-        format.html { redirect_to officer_url(@officer), notice: "Officer was successfully created." }
-        format.json { render :show, status: :created, location: @officer }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @officer.errors, status: :unprocessable_entity }
+    if current_user_login.role=='officer' && Current.user.role=='DSP'
+      @officer = Officer.new(officer_params)
+      @login = UserLogin.new(email: params[:officer][:email], password: params[:officer][:password], role: 'officer')
+      respond_to do |format|
+        if @officer.save && @login.save
+          format.html { redirect_to officer_url(@officer), notice: "Officer was successfully created." }
+          format.json { render :show, status: :created, location: @officer }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @officer.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_user("Unauthorized Access")
     end
   end
 
   # PATCH/PUT /officers/1
   def update
-    respond_to do |format|
-      if @officer.update(officer_params)
-        format.html { redirect_to officer_url(@officer), notice: "Officer was successfully updated." }
-        format.json { render :show, status: :ok, location: @officer }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @officer.errors, status: :unprocessable_entity }
+    if current_user_login.role=='officer' && ((Current.user.role=='DSP') || (Current.user.id==params[:id].to_i))
+      respond_to do |format|
+        if @officer.update(officer_params)
+          format.html { redirect_to officer_url(@officer), notice: "Officer was successfully updated." }
+          format.json { render :show, status: :ok, location: @officer }
+        else
+          format.html { render :edit, status: :unprocessable_entity }
+          format.json { render json: @officer.errors, status: :unprocessable_entity }
+        end
       end
+    else
+      redirect_user("Unauthorized Access")
     end
   end
 

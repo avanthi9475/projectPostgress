@@ -7,7 +7,8 @@ class Complaint < ApplicationRecord
     has_one :lead_officer, class_name: 'Officer', foreign_key: 'id', primary_key: 'leadOfficerID', dependent: :destroy
 
     validates :user_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
-    validates :statement, presence: true
+    validates :statement, presence: true, length: {minimum: 15}
     validates :location, presence: true, format: { with: /\A[a-zA-Z]+\z/ }
+    validates :dateTime, presence: true
     
 end 

@@ -60,7 +60,6 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @login = UserLogin.new(login_params)
-
     respond_to do |format|
       if @user.save && @login.save
         format.html { redirect_to user_url(@user), notice: "User was successfully created." }
@@ -74,13 +73,35 @@ class UsersController < ApplicationController
 
   # PATCH/PUT /users/1 
   def update
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
-        format.json { render :show, status: :ok, location: @user }
+    @user = User.find_by(id: params[:id])
+    if current_user_login.role=='officer'
+      @users = Current.user.users
+      if @users.include?(@user) || Current.user.role=='DSP'
+        respond_to do |format|
+          if @user.update(user_params)
+            format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+            format.json { render :show, status: :ok, location: @user }
+          else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @user.errors, status: :unprocessable_entity }
+          end
+        end
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        redirect_user("Unauthorized Access")
+      end
+    else
+      if  @user.id == Current.user.id
+        respond_to do |format|
+          if @user.update(user_params)
+            format.html { redirect_to user_url(@user), notice: "User was successfully updated." }
+            format.json { render :show, status: :ok, location: @user }
+          else
+            format.html { render :edit, status: :unprocessable_entity }
+            format.json { render json: @user.errors, status: :unprocessable_entity }
+          end
+        end
+      else
+        redirect_user("Unauthorized Access")
       end
     end
   end

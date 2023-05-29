@@ -10,10 +10,27 @@ class UserLogin < ApplicationRecord
   end
 
   validates :email, format: URI::MailTo::EMAIL_REGEXP
+  validates :role, presence: true
 
   enum role: { admin: 'admin', user: 'user', officer: 'officer' }
 
   scope :number_of_users, ->{UserLogin.where(role: 'user')}
   scope :number_of_officers, ->{UserLogin.where(role: 'officer')}
+
+  def isUser?
+    if role=='user'
+      return true
+    else
+      return false
+    end
+  end
+
+  def isOfficer?
+    if role=='officer'
+      return true
+    else
+      return false
+    end
+  end
   
 end

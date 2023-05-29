@@ -11,15 +11,13 @@
     </div>
   <% end %>
 
-  <% if !crime_fir.present?%>
-  <div class="field form-group p-2">
-    <%= form.label :user_id, class: "form-label fw-bold fs-5 py-2"  %>
-    <%= form.number_field :user_id, value: params[:user_id], readonly: true, class: "form-control shadow shadow-sm"  %>
+  <% if crime_fir.id==nil%>
+  <div class="field form-group">
+    <%= form.hidden_field :user_id, value: params[:user_id],  class: "form-control shadow shadow-sm"  %>
   </div>
 
-   <div class="field form-group p-2">
-    <%= form.label :complaint_id, class: "form-label fw-bold fs-5 py-2" %>
-    <%= form.number_field :complaint_id, value: params[:complaint_id] , readonly: true , class: "form-control shadow shadow-sm"%>
+   <div class="field form-group">
+    <%= form.hidden_field :complaint_id, value: params[:complaint_id] , class: "form-control shadow shadow-sm"%>
   </div>
   <% end %>
 

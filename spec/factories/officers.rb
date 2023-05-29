@@ -1,4 +1,5 @@
 FactoryBot.define do
+
   factory :officer do
     email { "devashree@gmail.com" }
     name { "Devashree" }
@@ -6,4 +7,5 @@ FactoryBot.define do
     location { "Chennai" }
     role { "DSP" }
   end
+  
 end

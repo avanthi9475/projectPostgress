@@ -5,16 +5,18 @@ class Api::MessagesController <  Api::ApiController
     if current_user.present?
       if current_userlogin.present? && current_user.role=='officer' && current_userlogin.role=='DSP'
         @messages = Message.all
-      elsif current_userlogin.present?
+      elsif current_userlogin.present? && current_user.role=='officer'
+        @messages = current_userlogin.request_messages
+      else
         @messages = current_userlogin.messages
       end
       if @messages && @messages.size>=1
         render json: @messages, status: 200
       else
-        render json: {error: 'You have not received any messages'}, status: 404
+        render json: {error: 'You have not received any messages'}, status: 204
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
@@ -26,7 +28,7 @@ class Api::MessagesController <  Api::ApiController
         if @message
           render json: @message, status: 200
         else
-          render json: {error: 'Message Not Found'}, status: 404
+          render json: {error: 'Message Not Found'}, status: 204
         end
       else
         if @message && current_userlogin.present?
@@ -34,14 +36,14 @@ class Api::MessagesController <  Api::ApiController
           if @messages.size>=1 && @messages.include?(@message)
             render json: @message, status: 200
           else
-            render json: {error: "You don't have access to view other's messages"}, status: 404
+            render json: {error: "You don't have access to view other's messages"}, status: 403
           end
         else
-          render json: {error: 'Message Not Found'}, status: 404
+          render json: {error: 'Message Not Found'}, status: 204
         end
       end
     else
-      render json: {error: 'Restricted Access'}
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
@@ -58,7 +60,7 @@ class Api::MessagesController <  Api::ApiController
           if @message.save && (current_user.role=='user' || @status.save)
             render json: @message, status: 200
           else
-            render json: {error: @message.errors.full_messages}, status: 404
+            render json: {error: @message.errors.full_messages}, status: 403
           end
         else 
           @msg = Message.find_by(id: params[:message][:parent_id])
@@ -68,29 +70,29 @@ class Api::MessagesController <  Api::ApiController
             if @message.save && (current_user.role=='user' || @status.save)
               render json: @message, status: 200
             else
-              render json: {error: @message.errors.full_messages}, status: 404
+              render json: {error: @message.errors.full_messages}, status: 403
             end
           else
             render json: {error: 'This complaint does not have any request messages{Please provide the request message id properly}'}, status: 404
           end
         end
       else
-        render json: {error: 'Complaint Does not exist'}, status: 404
+        render json: {error: 'Complaint Does not exist'}, status: 403
       end
     else
-      render json: {error: 'Restricted Access'}, status: 404
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
   # PATCH/PUT /messages/1
   def update
-    if current_user.present? && current_userlogin.present?
-      @messages = current_userlogin.messages
+    if current_user.present? && current_userlogin.present? && current_user.role=='officer'
+      @messages = current_userlogin.request_messages
       @message = Message.find_by(id: params[:id].to_i)
       if @message.present? 
         if (@messages.size>=1 && @messages.include?(@message)) || (current_user.role=='officer' && current_userlogin.role=='DSP')
           if params[:message][:complaint_id]!=nil 
-            render json: {error: 'Complaint ID cannot be updated'}, status: 404
+            render json: {error: 'Complaint ID cannot be updated'}, status: 403
           else
             if params[:message][:statement]!=nil 
               @message.statement =params[:message][:statement]
@@ -101,40 +103,44 @@ class Api::MessagesController <  Api::ApiController
             if @message.save
               render json: @message, status: 200
             else
-              render json: {error: @message.errors.full_messages}, status: 404
+              render json: {error: @message.errors.full_messages}, status: 403
             end
           end
         else
-          render json: {error: "You don't have access to edit others messages"}, status: 404
+          render json: {error: "You don't have access to edit others messages"}, status: 401
         end
       else
-        render json: {error: 'Message not found'}, status: 404
+        render json: {error: 'Message not found'}, status: 204
       end
     else
-      render json: {error: 'Restricted Access'}, status: 404
+      render json: {error: 'Restricted Access'}, status: 401
     end
   end
 
   # DELETE /messages/1
   def destroy
     if current_user.present? && current_userlogin.present? && current_user.role=='officer'
-      @messages = current_userlogin.messages
+      if current_user.role=='user'
+        @messages = current_userlogin.response_messages
+      else
+        @messages = current_userlogin.request_messages
+      end
       @message = Message.find_by(id: params[:id].to_i)
       if @message.present? 
         if (@messages.size>=1 && @messages.include?(@message)) || (current_user.role=='officer' && current_userlogin.role=='DSP')
           if @message.destroy
             render json: {message: 'Message was deleted successfully'}, status: 200
           else
-            render json: {error: @message.errors.full_messages}, status: 404
+            render json: {error: @message.errors.full_messages}, status: 403
           end
         else
-          render json: {error: "You don't have access to delete others messages"}, status: 404
+          render json: {error: "You don't have access to delete others messages"}, status: 401
         end
       else
-        render json: {error: 'Message not found'}, status: 404
+        render json: {error: 'Message not found'}, status: 204
       end
     else
-      render json: {error: 'Restricted Access'}, status: 404
+      render json: {error: 'Restricted Access'}, status: 401
     end    
   end
 

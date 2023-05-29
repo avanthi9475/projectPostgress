@@ -1,4 +1,5 @@
 FactoryBot.define do
+
   factory :user do
     email { "avanthika@gmail.com" }
     name { "Avanthika" }
@@ -6,4 +7,5 @@ FactoryBot.define do
     location { "Chennai" }
     noOfComplaintsMade { 1 }
   end
+  
 end
