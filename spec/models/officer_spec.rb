@@ -206,7 +206,7 @@ RSpec.describe Officer, type: :model do
         let(:complaint) {create(:complaint, user_id:user.id)}
         let!(:officers_complaint) {create(:officers_complaint, complaint_id: complaint.id, officer_id: officer.id, IsHead: 'No')}
         it 'is officer the lead of the complaint' do
-            expect(officer.is_head_for_complaint(complaint.id)).to eq("No")
+            expect(officer.is_head_for_complaint(complaint.id, officer.id)).to eq("No")
         end
     end
 
@@ -217,7 +217,7 @@ RSpec.describe Officer, type: :model do
         let(:complaint) {create(:complaint, user_id:user.id)}
         let!(:officers_complaint) {create(:officers_complaint, complaint_id: complaint.id, officer_id: officer.id, IsHead: 'Yes')}
         it 'is officer the lead of the complaint' do
-            expect(officer.is_head_for_complaint(complaint.id)).to eq("Yes")
+            expect(officer.is_head_for_complaint(complaint.id, officer.id)).to eq("Yes")
         end
     end
 end
