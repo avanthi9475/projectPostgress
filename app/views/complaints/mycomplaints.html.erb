@@ -17,7 +17,7 @@
         <tbody>
           <% @complaints.each do |complaint| %>
             <tr>
-              <td class="p-4 fs-6"><%= complaint.user_id %></td>
+              <td class="p-4 fs-6"><%= complaint.user.name %></td>
               <td class="p-4 fs-6"><%= complaint.statement %></td>
               <td class="p-4 fs-6"><%= complaint.location %></td>
               <td class="p-4 fs-6"><% if complaint.status %><%= complaint.status.status %><% else %><%= "Registered" %><% end %></td>
@@ -26,7 +26,6 @@
               <td><%= link_to 'Make Request', new_message_path(complaint_id: complaint.id)%></td>
               <td class="p-4 fs-6"><%= link_to 'Show', complaint %></td>
               <td class="p-4 fs-6"><%= link_to 'Edit', edit_complaint_path(complaint) %></td>
-              <td class="p-4 fs-6"><%= link_to 'Destroy', complaint, method: :delete, data: { confirm: 'Are you sure?' } %></td>
             </tr>
           <% end %>
         </tbody>

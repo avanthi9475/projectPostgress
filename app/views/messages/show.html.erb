@@ -3,14 +3,10 @@
   <div class="border border-sm rounded m-5 p-5">
     <div class="px-5 mx-5">
       <table class="table table-responsive">
-        <tr>
-          <td class="p-4 fs-4 fw-bold">Message:</td>
-          <td class="p-4 fs-4"><%= @message.message_id %></td>
-        </tr>
 
-        <tr>
-          <td class="p-4 fs-4 fw-bold">Message type:</td>
-          <td class="p-4 fs-4"><%= @message.message_type %></td>
+       <tr>
+          <td class="p-4 fs-4 fw-bold">User:</td>
+          <td class="p-4 fs-4"><%= @message.complaint.user.name %></td>
         </tr>
 
         <tr>
@@ -36,8 +32,6 @@
         </tr>
       </table>
       <div class="d-flex pt-4 justify-content-center">
-      <%= link_to 'Edit', edit_message_path(@message), class: "btn btn-secondary text-light btn-lg mx-2" %>
-      <%= link_to 'Back', messages_path, class: "btn btn-secondary text-light btn-lg mx-2" %>
      </div>
     </div>
   <div>

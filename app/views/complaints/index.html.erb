@@ -10,14 +10,18 @@
             <th class="p-4 fs-5">Location</th>
             <th class="p-4 fs-5">Status</th>
             <th class="p-4 fs-5">Datetime</th>
-            <th colspan="4"></th>
+            <% if current_user_login.role=='officer' %>
+               <th colspan="5"></th>
+            <% else %>
+               <th colspan="4"></th>
+            <% end %>
           </tr>
         </thead>
 
         <tbody>
           <% @complaints.each do |complaint| %>
             <tr>
-              <td class="p-4 fs-6"><%= complaint.user_id %></td>
+              <td class="p-4 fs-6"><%= complaint.user.name %></td>
               <td class="p-4 fs-6"><%= complaint.statement %></td>
               <td class="p-4 fs-6"><%= complaint.location %></td>
               <td class="p-4 fs-6"><% if complaint.status %><%= complaint.status.status %><% else %><%= "Registered" %><% end %></td>

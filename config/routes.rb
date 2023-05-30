@@ -26,7 +26,13 @@ Rails.application.routes.draw do
 
   get '/handledByOfficer/:id' => "complaints#handledByOfficer"
 
+  post '/handledByOfficer/:id' => "complaints#assign_new_officer"
+
   get '/viewResponse' => "users#viewResponse"
+
+  post  "/remove_officer/:id" => "complaints#remove_officer"
+
+  post "/make_as_lead/:id" => "complaints#make_head"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   scope :api do

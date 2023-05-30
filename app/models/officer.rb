@@ -1,6 +1,6 @@
 class Officer < ApplicationRecord
     has_many :messages, as: :message, dependent: :destroy
-    has_and_belongs_to_many :complaints, join_table: :officers_complaints
+    has_and_belongs_to_many :complaints, join_table: :officers_complaints, dependent: :destroy
     has_many :request_messages, -> { where(message_type: 'User') }, through: :complaints, source: :messages, dependent: :destroy
     has_many :crime_firs, through: :complaints
     has_many :users, through: :complaints
@@ -13,7 +13,7 @@ class Officer < ApplicationRecord
 
     enum role: {DSP: 'DSP', Inspector: 'Inspector', Sub_Inspector: 'Sub-Inspector'}
 
-    def is_head_for_complaint(complaint_id)
-        OfficersComplaint.find_by(complaint_id: complaint_id)&.IsHead
+    def is_head_for_complaint(complaint_id, officer_id)
+        OfficersComplaint.find_by(complaint_id: complaint_id, officer_id: officer_id)&.IsHead
     end
 end

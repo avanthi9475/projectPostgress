@@ -5,8 +5,7 @@
       <table class="table table-responsive table-striped">
         <thead class="thead-dark bg-dark text-light align-text-center">
           <tr>
-            <th class="p-4 fs-5">Message</th>
-            <th class="p-4 fs-5">Message type</th>
+            <th class="p-4 fs-5">User</th>
             <th class="p-4 fs-5">Complaint</th>
             <th class="p-4 fs-5">Statement</th>
             <th class="p-4 fs-5">Datetime</th>
@@ -20,8 +19,7 @@
         <tbody>
           <% @messages.each do |message| %>
             <tr>
-              <td class="p-4 fs-6"><%= message.message_id %></td>
-              <td class="p-4 fs-6"><%= message.message_type %></td>
+              <td class="p-4 fs-6"><%= message.complaint.user.name %></td>
               <td class="p-4 fs-6"><%= message.complaint_id %></td>
               <td class="p-4 fs-6"><%= message.statement %></td>
               <td class="p-4 fs-6"><%= message.dateTime %></td>

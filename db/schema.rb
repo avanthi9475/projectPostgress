@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_22_043720) do
+ActiveRecord::Schema.define(version: 2023_05_29_073912) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,15 +69,6 @@ ActiveRecord::Schema.define(version: 2023_05_22_043720) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
-  create_table "admins", force: :cascade do |t|
-    t.string "email"
-    t.string "name"
-    t.integer "age"
-    t.string "location"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "complaints", force: :cascade do |t|
     t.bigint "user_id"
     t.text "statement"
@@ -85,6 +76,7 @@ ActiveRecord::Schema.define(version: 2023_05_22_043720) do
     t.datetime "dateTime", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "leadOfficerID"
     t.index ["user_id"], name: "index_complaints_on_user_id"
   end
 
@@ -148,7 +140,7 @@ ActiveRecord::Schema.define(version: 2023_05_22_043720) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "officers_complaints", id: false, force: :cascade do |t|
+  create_table "officers_complaints", force: :cascade do |t|
     t.bigint "officer_id"
     t.bigint "complaint_id"
     t.string "IsHead"

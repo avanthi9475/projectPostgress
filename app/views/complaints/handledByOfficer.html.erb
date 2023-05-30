@@ -8,6 +8,9 @@
             <th class="p-4 fs-5">Officer Name</th>
             <th class="p-4 fs-5">Officer Role</th>
             <th class="p-4 fs-5">Head</th>
+            <% if (current_user_login.role=='officer') && (Current.user.role=='DSP' || (Current.user.is_head_for_complaint(params[:id], Current.user.id )=='Yes'))  %>
+            <th></th>
+            <% end %>
           </tr>
         </thead>
 
@@ -16,12 +19,29 @@
             <tr>
               <td class="p-4 fs-6"><%= officer.name %></td>
               <td class="p-4 fs-6"><%= officer.role %></td>
-              <td class="p-4 fs-6"><%= officer.is_head_for_complaint(params[:id]) %></td>
+              <% if (officer.is_head_for_complaint(params[:id], officer.id)=='Yes') %>
+              <td class="p-4 fs-6">Lead Officer</td>
+              <% else %>
+              <td class="p-3 fs-6"><%= button_to 'Make As Lead', "/make_as_lead/#{officer.id}", params:{"officer_id" => officer.id, "complaint_id" => params[:id]}, class:'btn btn-link link-secondary' %></td>
+              <% end %>
+              <% if (current_user_login.role=='officer') && (Current.user.role=='DSP' || (Current.user.is_head_for_complaint(params[:id], Current.user.id )=='Yes'))  %>
+              <td class="p-3 fs-6"><%= button_to 'Remove Officer', "/remove_officer/#{officer.id}", params:{"officer_id" => officer.id, "complaint_id" => params[:id]}, class:'btn btn-link link-secondary' %></td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
-        
+
       </table>
+      <% if (current_user_login.role=='officer') && (Current.user.role=='DSP' || (Current.user.is_head_for_complaint(params[:id], Current.user.id )=='Yes'))  %>
+        <div class="row me-5 pe-5 py-3">
+        <%= form_with url: "/handledByOfficer/#{params[:id]}",method: :post, action: "assign_new_officer" do |form| %>
+          <%= form.label 'Assign to New Officer', class: "form-label fw-bold fs-5 py-2" %>
+          <% @comp_off = Complaint.find_by(id: params[:id]).officers %>
+          <%= select_tag :assign_to_officer, options_for_select(Officer.all.where.not(id: @comp_off.pluck(:id)).map { |c| [c.name, c.id] }), { :multiple => false, include_blank: 'Select', class: "form-select shadow shadow-sm ", required: true}  %>
+          <%= form.submit "Assign", class: "btn btn-secondary shadow shadow-sm mt-2" %>
+        <% end %>
+        </div>
+      <% end %>
     </div>  
-  <div>
+  </div>
 </div>

@@ -17,7 +17,7 @@
         <tbody>
           <% @crime_firs.each do |crime_fir| %>
             <tr>
-              <td class="p-4 fs-6"><%= crime_fir.user_id %></td>
+              <td class="p-4 fs-6"><%= crime_fir.user.name %></td>
               <td class="p-4 fs-6"><%= crime_fir.under_section %></td>
               <td class="p-4 fs-6"><%= crime_fir.crime_category %></td>
               <td class="p-4 fs-6"><%= crime_fir.dateTime_of_crime %></td>

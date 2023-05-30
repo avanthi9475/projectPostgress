@@ -31,6 +31,44 @@ class ComplaintsController < ApplicationController
     end
   end
 
+  def assign_new_officer
+    @officers_complaints = OfficersComplaint.new(officer_id: params[:assign_to_officer], complaint_id: params[:id], IsHead: "No")
+    if @officers_complaints.save
+      flash[:notice] = 'Officer Assigned Successfully'
+      redirect_to "/handledByOfficer/#{params[:id]}"
+    else
+      flash[:alert] = 'Some unknown error occured'
+      redirect_to "/handledByOfficer/#{params[:id]}"
+    end
+  end
+
+  def remove_officer
+    @complaint = OfficersComplaint.find_by(officer_id: params[:officer_id], complaint_id: params[:complaint_id])
+    if @complaint && @complaint.IsHead == 'Yes'
+      flash[:alert] = 'Lead Officer cannot be removed. please assign some other officer as lead and then try!!'
+      redirect_to "/handledByOfficer/#{params[:complaint_id]}"
+    elsif @complaint.destroy
+      flash[:notice] = 'Officer Removed Successfully'
+      redirect_to "/handledByOfficer/#{params[:complaint_id]}"
+    else
+      flash[:alert] = @complaint.error.full_messages
+      redirect_to "/handledByOfficer/#{params[:complaint_id]}"
+    end 
+  end
+
+  def make_head
+    @officer1 = OfficersComplaint.find_by(complaint_id: params[:complaint_id], IsHead:'Yes')
+    @officer2 = OfficersComplaint.find_by(officer_id: params[:officer_id], complaint_id: params[:complaint_id])
+
+    if @officer1.update(IsHead: 'No') && @officer2.update(IsHead: 'Yes')
+      flash[:notice] = 'Lead Changed Successfully'
+      redirect_to "/handledByOfficer/#{params[:complaint_id]}"
+    else
+      flash[:alert] = @officer2.error.full_messages
+      redirect_to "/handledByOfficer/#{params[:complaint_id]}"
+    end 
+  end
+
   def handledByOfficer
     @complaint = Complaint.find_by(id: params[:id])
     @complaints = Current.user.complaints
@@ -38,7 +76,7 @@ class ComplaintsController < ApplicationController
       unless ((@complaints && @complaints.include?(@complaint)) || (@current_user_login.role=='officer' && Current.user.role=='DSP'))
         redirect_user("Unauthorized Access")
       else
-        @officers = @complaint.officers 
+        @officers = @complaint.officers.order(:created_at)
       end
     else
       redirect_user("Invalid ID")
@@ -64,17 +102,17 @@ class ComplaintsController < ApplicationController
     @complaint = Complaint.new(complaint_params)
     @officer = Officer.find_by(role: 'DSP')
     @user = User.find_by(id: params[:complaint][:user_id])  
-    
     respond_to do |format|
-      if @complaint.save && @user.update(noOfComplaintsMade: @user.noOfComplaintsMade + 1 )
-          @officers_complaints = OfficersComplaint.new(officer_id: @officer.id, complaint_id: @complaint.id, IsHead: "Yes")
-          if @officers_complaints.save
-            format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully created." }
-            format.json { render :show, status: :created, location: @complaint }
-          else
-            format.html { render :new, status: :unprocessable_entity }
-            format.json { render json: @complaint.errors, status: :unprocessable_entity }
-          end
+      if @complaint.save 
+        # @user.noOfComplaintsMade = @user.noOfComplaintsMade + 1
+        @officers_complaints = OfficersComplaint.new(officer_id: @officer.id, complaint_id: @complaint.id, IsHead: "Yes")
+        if @officers_complaints.save # && @user.save
+          format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully created." }
+          format.json { render :show, status: :created, location: @complaint }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @complaint.errors, status: :unprocessable_entity }
+        end
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @complaint.errors, status: :unprocessable_entity }

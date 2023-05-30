@@ -18,7 +18,7 @@
   <% else %>
     <div class="form-group p-2">
       <label class= "form-label fw-bold fs-5 py-2" for="user_id">User-ID</label>
-      <input class="form-control shadow shadow-sm"  type="number" name="complaint[user_id]" value=<%= complaint.user_id==nil ? nil : complaint.user_id%>>
+      <%= form.select :user_id, options_for_select(User.all.map { |c| [c.name, c.id] }), { :multiple => false, include_blank: 'Select'}, {class: "form-select shadow shadow-sm ", required: true}  %>
     </div>
   <% end %>
 
