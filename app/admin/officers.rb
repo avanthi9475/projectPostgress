@@ -32,4 +32,9 @@ ActiveAdmin.register Officer do
   filter :location
   filter :created_at
 
+  scope :all
+  scope :DSP
+  scope :Inspector
+  scope :SubInspector
+
 end

@@ -18,4 +18,27 @@ class ApplicationController < ActionController::Base
         end
     end
 
+    def check_for_messages
+        if current_user_login.present?
+            if current_user_login.role=="officer"
+                @messages =  Current.user.request_messages.where("messages.created_at < ?", DateTime.now)
+                @messages = @messages.select { |msg| msg.status.status == "Sent" }
+                @messages.each do |message| 
+                    message.status.update(status: 'Pending')
+                end 
+                if(@messages.size>0)
+                    flash[:info] = "New Request Messages"
+                end
+            else
+                @messages = Current.user.response_messages.where("messages.created_at < ?", DateTime.now)
+                @messages = @messages.select { |msg| msg.status.status == "Sent" }
+                @messages.each do |message| 
+                    message.status.update(status: 'Received')
+                end 
+                if(@messages.size>0)
+                    flash[:info] = "You have received response from officers"
+                end
+            end
+        end
+    end
 end

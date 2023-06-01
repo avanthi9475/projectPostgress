@@ -29,5 +29,8 @@ ActiveAdmin.register Complaint do
   filter :created_at
 
   scope :all
-
+  scope :registered
+  scope :inprogress
+  scope :resolved
+  
 end

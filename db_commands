@@ -60,12 +60,11 @@ belongs_to :complaint, foreign_key: 'complaint_id'
     has_one_attached :aadharCardCopy
     
     
-    
 when responded/resolved view history for complaints & messages
 mail catcher
-complaint statement also included
-live messages
-add crime_fir in active admin
+# user name also included
+# live messages
+# add crime_fir in active admin
 
 
 

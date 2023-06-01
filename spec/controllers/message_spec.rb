@@ -14,12 +14,14 @@ RSpec.describe MessagesController do
     let!(:crime_fir1) {create(:crime_fir, user_id: user.id, complaint_id:complaint.id)}
     let!(:officers_complaint1) {create(:officers_complaint, complaint_id:complaint.id, officer_id:subofficer.id)}
     let!(:message1) {create(:message , message_id: user.id, message_type:"User", complaint_id:complaint.id)}
+    let!(:status1) {create(:status, statusable_id:message1.id, statusable_type: 'Message', status: 'Sent')}
 
     let!(:anotherUser) {create(:user)}
     let!(:complaint2) {create(:complaint, user_id: anotherUser.id)}
     let!(:officers_complaint2) {create(:officers_complaint, complaint_id:complaint2.id, officer_id:officer.id)}
     let!(:crime_fir2) {create(:crime_fir, user_id: anotherUser.id, complaint_id:complaint2.id)}
     let!(:message2) {create(:message, :for_user, complaint_id:complaint2.id)}
+    let!(:status2) {create(:status, statusable_id:message2.id, statusable_type: 'Message', status: 'Sent')}
 
 
 

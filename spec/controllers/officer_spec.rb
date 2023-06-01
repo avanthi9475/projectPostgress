@@ -8,8 +8,6 @@ RSpec.describe OfficersController do
     let!(:officer) {create(:officer, email:current_officer_login.email)}
     let!(:sub_officer) {create(:user_login, role:'officer')}
     let!(:subofficer) {create(:officer, email:sub_officer.email, role: 'Inspector')}
-    let!(:complaint) {create(:complaint, user_id: user.id)}
-    let!(:officers_complaint) {create(:officers_complaint, complaint_id:complaint.id, officer_id:subofficer.id)}
 
 
     describe "get/officers #index" do
@@ -294,7 +292,7 @@ RSpec.describe OfficersController do
                 sign_in current_officer_login
                 patch :update , params:{id: officer.id, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
             end
-            it "officer updated successfully" do
+            it "officer updated succeallow(user).to receive(:confirmed_at).and_return(nil)ssfully" do
                 expect(response).to redirect_to officer
             end
         end

@@ -2,8 +2,8 @@ class Officer < ApplicationRecord
     has_many :messages, as: :message, dependent: :destroy
     has_and_belongs_to_many :complaints, join_table: :officers_complaints, dependent: :destroy
     has_many :request_messages, -> { where(message_type: 'User') }, through: :complaints, source: :messages, dependent: :destroy
-    has_many :crime_firs, through: :complaints
-    has_many :users, through: :complaints
+    has_many :crime_firs, through: :complaints, dependent: :destroy
+    has_many :users, through: :complaints, dependent: :destroy
 
     validates :name, presence: true, format: { with: /\A[a-zA-Z]+\z/ }
     validates :age, presence: true, numericality: { only_integer: true, greater_than: 18 }
@@ -16,4 +16,8 @@ class Officer < ApplicationRecord
     def is_head_for_complaint(complaint_id, officer_id)
         OfficersComplaint.find_by(complaint_id: complaint_id, officer_id: officer_id)&.IsHead
     end
+
+    scope :dsp, ->{Officer.where(role: 'DSP')}
+    scope :Inspector, ->{Officer.where(role: 'Inspector')}
+    scope :SubInspector, ->{Officer.where(role: 'SubInspector')}
 end

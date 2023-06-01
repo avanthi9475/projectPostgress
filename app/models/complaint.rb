@@ -10,5 +10,9 @@ class Complaint < ApplicationRecord
     validates :statement, presence: true, length: {minimum: 15}
     validates :location, presence: true, format: { with: /\A[a-zA-Z]+\z/ }
     validates :dateTime, presence: true
+
+    scope :registered, ->{Complaint.joins(:crime_fir).joins(:status).where(statuses:{status: 'Registered'})}
+    scope :inprogress, ->{Complaint.joins(:crime_fir).joins(:status).where(statuses:{status: 'Inprogress'})}
+    scope :resolved, ->{Complaint.joins(:crime_fir).joins(:status).where(statuses:{status: 'Resolved'})}
     
 end 

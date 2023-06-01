@@ -17,7 +17,6 @@ class UserLogins::RegistrationsController < Devise::RegistrationsController
     end
 
     def after_sign_out_path_for(resource_or_scope)
-        # Customize the redirection path after sign out
         new_user_session_path
     end
 

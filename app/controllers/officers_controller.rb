@@ -1,6 +1,8 @@
 class OfficersController < ApplicationController
   before_action :authenticate_user_login!
   before_action :set_officer, only: %i[ show edit update destroy ]
+  before_action :check_for_messages
+
 
   # GET /officers
   def index

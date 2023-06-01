@@ -1,6 +1,7 @@
 class MessagesController < ApplicationController
   before_action :authenticate_user_login!
   before_action :set_message, only: %i[ show edit update destroy ]
+  before_action :check_for_messages
 
   # GET /messages
   def index
@@ -51,7 +52,7 @@ class MessagesController < ApplicationController
   def create
     @message = Current.user.messages.new(message_params)
     if(current_user_login.role=='user')
-      @status = Status.new({status: "Pending"})
+      @status = Status.new({status: "Sent"})
       @message.status = @status
     else
       @msg = Message.find_by(id: params[:message][:parent_id])

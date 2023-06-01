@@ -17,4 +17,8 @@ class CrimeFir < ApplicationRecord
         @status.save
     end
     
+    scope :registered, ->{CrimeFir.joins(:status).where(statuses:{status: 'Registered'})}
+    scope :inprogress, ->{CrimeFir.joins(:status).where(statuses:{status: 'Inprogress'})}
+    scope :resolved, ->{CrimeFir.joins(:status).where(statuses:{status: 'Resolved'})}
+    
 end

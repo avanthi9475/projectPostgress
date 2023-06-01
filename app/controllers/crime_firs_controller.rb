@@ -1,6 +1,7 @@
 class CrimeFirsController < ApplicationController
   before_action :authenticate_user_login!
   before_action :set_complaint, only: %i[ show edit update destroy ]
+  before_action :check_for_messages
 
   def index
     if current_user_login.present? && current_user_login.role=='officer'
