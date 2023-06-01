@@ -8,15 +8,19 @@ RSpec.describe Api::SessionsController , type: :request do
 
     describe "get/index #index" do
         context "When user signed in" do
-            it "Restricted Access" do
+            before do
                 get "/api", params:{access_token: user_token.token}
+            end
+            it "Restricted Access" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do
                 get "/api"
+            end
+            it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
         end

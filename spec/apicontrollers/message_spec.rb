@@ -29,29 +29,37 @@ RSpec.describe Api::MessagesController , type: :request do
     
     describe "get/messages #index" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get "/api/messages"
+            end
+            it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
-            it "redirects to user profile page" do
+            before do 
                 get "/api/messages",  params: {access_token: user_token.token}
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as head officer" do
-            it "redirects to messages index" do
+            before do 
                 get "/api/messages", params: {access_token: officer_token.token}
+            end
+            it "redirects to messages index" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub officer" do
-            it "redirects to messages index" do
+            before do 
                 get "/api/messages", params: {access_token: sub_officer_token.token}
+            end
+            it "redirects to messages index" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -59,22 +67,28 @@ RSpec.describe Api::MessagesController , type: :request do
 
     describe "get/messages #show" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get  "/api/messages/#{message1.id}"
+            end
+            it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user and tries to view their message" do
-            it "redirects to show message page" do
+            before do 
                 get  "/api/messages/#{message1.id}", params: {access_token: user_token.token}
+            end
+            it "redirects to show message page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as user and tries to view others message" do
-            it "redirects to user profile page" do
+            before do 
                 get  "/api/messages/#{message2.id}",params: {access_token: user_token.token}
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(403)
             end
         end
@@ -82,15 +96,19 @@ RSpec.describe Api::MessagesController , type: :request do
     
     describe "post/messages #create" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 post "/api/messages", params:{message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When user signed in" do
-            it "message created successfully" do
+            before do 
                 post "/api/messages", params:{access_token: user_token.token, message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "message created successfully" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -98,29 +116,37 @@ RSpec.describe Api::MessagesController , type: :request do
 
     describe "patch/messages #update" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 patch "/api/messages/#{message1.id}", params:{message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user and tries to update message, " do
-            it "message updated successfully" do
+            before do 
                 patch "/api/messages/#{message1.id}", params:{access_token: user_token.token, message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "message updated successfully" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as officer and tries to update their message," do
-            it "message updated successfully" do
+            before do 
                 patch "/api/messages/#{message1.id}", params:{access_token: sub_officer_token.token, message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "message updated successfully" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and tries to update others message" do
-            it "redirects to officer profile page" do
+            before do 
                 patch "/api/messages/#{message2.id}", params:{access_token: sub_officer_token.token, message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "redirects to officer profile page" do
                 expect(response).to have_http_status(401)
             end
         end
@@ -128,29 +154,37 @@ RSpec.describe Api::MessagesController , type: :request do
     
     describe "delete/messages #delete" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 delete "/api/messages/#{message1.id}"
+            end
+            it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user and tries to delete message" do
-            it "redirect to user profile page" do
+            before do 
                 delete "/api/messages/#{message1.id}", params:{access_token: user_token.token}
+            end
+            it "redirect to user profile page" do
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as officer and tries to delete their message," do
-            it "message deleted successfully" do
+            before do 
                 delete "/api/messages/#{message1.id}", params:{access_token: sub_officer_token.token}
+            end
+            it "message deleted successfully" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and tries to delete others message" do
-            it "redirects to officer profile page" do
+            before do 
                 delete "/api/messages/#{message2.id}", params:{access_token: sub_officer_token.token}
+            end
+            it "redirects to officer profile page" do
                 expect(response).to have_http_status(401)
             end
         end

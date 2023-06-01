@@ -14,24 +14,30 @@ RSpec.describe UsersController do
 
     describe "get/users #index" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :index
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :index
+            end
+            it "redirects to user profile page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as head officer" do
-            it "redirects to users index" do
+            before do 
                 sign_in current_officer_login
                 get :index
+            end
+            it "redirects to users index" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -39,48 +45,60 @@ RSpec.describe UsersController do
 
     describe "get/users #show" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :show, params:{id: user.id}
                 expect(response).to redirect_to new_user_login_session_path
+            end
+            it "redirects to login page" do
             end
         end
 
         context "When signed in as user" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :show, params:{id: user.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as user and renders the other user profile page" do
-            it "redirects to current user profile page" do
+            before do 
                 sign_in current_user_login
                 get :show, params:{id: anotherUser.id}
+            end
+            it "redirects to current user profile page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as head officer" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_officer_login
                 get :show, params:{id: user.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and if the user belongs to the officer" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in sub_officer
                 get :show, params:{id: user.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and if the user does not belongs to the officer" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in sub_officer
                 get :show, params:{id: anotherUser.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to redirect_to subofficer
             end
         end
@@ -88,32 +106,40 @@ RSpec.describe UsersController do
 
     describe "get/users #new" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :new
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :new
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub-officer" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in sub_officer
                 get :new
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as head-officer" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_officer_login
                 get :new
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -121,48 +147,60 @@ RSpec.describe UsersController do
 
     describe "get/users #edit" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :edit , params:{id: user.id}
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to users edit page" do
+            before do 
                 sign_in current_user_login
                 get :edit, params:{id: user.id}
+            end
+            it "redirects to users edit page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as user and trying to edit another user profile" do
-            it "redirects to current user profile page" do
+            before do 
                 sign_in current_user_login
                 put :edit , params:{id: anotherUser.id}
+            end
+            it "redirects to current user profile page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as head officer" do
-            it "redirects to user edit page" do
+            before do 
                 sign_in current_officer_login
                 get :edit, params:{id: user.id}
+            end
+            it "redirects to user edit page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and if the user belongs to the officer" do
-            it "redirects to user edit page" do
+            before do 
                 sign_in current_officer_login
                 get :edit, params:{id: user.id}
+            end
+            it "redirects to user edit page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and if the user does not belongs to the officer" do
-            it "redirects to subofficer profile page" do
+            before do 
                 sign_in sub_officer
                 get :edit, params:{id: anotherUser.id}
+            end
+            it "redirects to subofficer profile page" do
                 expect(response).to redirect_to subofficer
             end
         end
@@ -171,32 +209,40 @@ RSpec.describe UsersController do
     
     describe "get/users #viewResponse" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :viewResponse
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to response messages page" do
+            before do 
                 sign_in current_user_login
                 get :viewResponse
+            end
+            it "redirects to response messages page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub-officer" do
-            it "redirects to sub-officer profile page" do
+            before do 
                 sign_in sub_officer
-                 get :viewResponse
+                get :viewResponse
+            end
+            it "redirects to sub-officer profile page" do
                 expect(response).to redirect_to subofficer
             end
         end
 
         context "When signed in as head-officer" do
-            it "redirects to head officer profile page" do
+            before do 
                 sign_in current_officer_login
-                 get :viewResponse
+                get :viewResponse
+            end
+            it "redirects to head officer profile page" do
                 expect(response).to redirect_to officer
             end
         end
@@ -204,32 +250,40 @@ RSpec.describe UsersController do
 
     describe "post/users #create" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 post :create, params:{user:{email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0, password:'123456', role:'user' }}
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "creates new user successfully" do
+            before do 
                 sign_in current_user_login
                 post :create, params:{user:{email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0, password:'123456', role:'user' }}
+            end
+            it "creates new user successfully" do
                 expect(response).to redirect_to User.last
             end
         end
 
         context "When signed in as sub-officer" do
-            it "creates new user successfully" do
+            before do 
                 sign_in sub_officer
                 post :create, params:{user:{email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0, password:'123456', role:'user' }}
+            end
+            it "creates new user successfully" do
                 expect(response).to redirect_to User.last
             end
         end
 
         context "When signed in as head-officer" do
-            it "creates new user successfully" do
+            before do 
                 sign_in current_officer_login
                 post :create, params:{user:{email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0, password:'123456', role:'user' }}
+            end
+            it "creates new user successfully" do
                 expect(response).to redirect_to User.last
             end
         end
@@ -237,52 +291,106 @@ RSpec.describe UsersController do
 
     describe "patch/users #update" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 patch :update , params:{id: user.id, user: {email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to users edit page" do
+            before do 
                 sign_in current_user_login
                 patch :update , params:{id: user.id, user: {email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "redirects to users edit page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as user and trying to edit another user profile" do
-            it "redirects to current user profile page" do
+            before do 
                 sign_in current_user_login
                 patch :update , params:{id: anotherUser.id, user: {email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "redirects to current user profile page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as head officer" do
-            it "redirects to user edit page" do
+            before do 
                 sign_in current_officer_login
                 patch :update , params:{id: user.id, user: {email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "redirects to user edit page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as officer and if the user belongs to the officer" do
-            it "redirects to user edit page" do
+            before do 
                 sign_in current_officer_login
                 patch :update , params:{id: user.id, user: {email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "redirects to user edit page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as officer and if the user does not belongs to the officer" do
-            it "redirects to subofficer profile page" do
+            before do 
                 sign_in sub_officer
                 patch :update , params:{id: anotherUser.id, user: {email: 'user@example.com', name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "redirects to subofficer profile page" do
                 expect(response).to redirect_to subofficer
             end
         end
     end
+
+    describe "delete/users #delete" do
+        context "When user not signed in" do
+            before do 
+                delete :destroy, params:{id: user.id}
+            end
+            it "redirects to login page" do
+                expect(response).to redirect_to new_user_login_session_path
+            end
+        end
+
+        context "When signed in as user" do
+            before do 
+                sign_in current_user_login
+                delete :destroy, params: {id: user.id}
+            end
+            it "redirects to user profile page" do
+                expect(response).to redirect_to user
+            end
+        end
+
+        context "When signed in as sub-officer" do
+            before do 
+                sign_in sub_officer
+                delete :destroy, params: {id: user.id}
+            end
+            it "redirects to sub-officer profile page" do
+                expect(response).to redirect_to subofficer
+            end
+        end
+
+        context "When signed in as officer" do
+            before do 
+                sign_in current_officer_login
+                delete :destroy, params: {id: anotherUser.id}
+            end
+            it "user deleted successfully" do
+                expect(response).to have_http_status(302)
+            end
+        end
+    end
+
 
 
 end

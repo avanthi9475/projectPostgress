@@ -25,32 +25,40 @@ RSpec.describe MessagesController do
 
     describe "get/messages #index" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :index
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :index
+            end
+            it "redirects to user profile page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as head officer" do
-            it "redirects to messages index" do
+            before do 
                 sign_in current_officer_login
                 get :index
+            end
+            it "redirects to messages index" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub officer" do
-            it "redirects to messages index" do
+            before do 
                 sign_in sub_officer
                 get :index
+            end
+            it "redirects to messages index" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -58,24 +66,30 @@ RSpec.describe MessagesController do
 
     describe "get/messages #show" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :show, params:{id: message1.id}
                 expect(response).to redirect_to new_user_login_session_path
+            end
+            it "redirects to login page" do
             end
         end
 
         context "When signed in as user and tries to view their message" do
-            it "redirects to show message page" do
+            before do 
                 sign_in current_user_login
                 get :show, params:{id: message1.id}
+            end
+            it "redirects to show message page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as user and tries to view others message" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :show, params:{id: message2.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to redirect_to user
             end
         end
@@ -83,32 +97,40 @@ RSpec.describe MessagesController do
 
     describe "get/officers #new" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :new
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user" do
-            it "redirects to new message page" do
+            before do 
                 sign_in current_user_login
                 get :new
+            end
+            it "redirects to new message page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub-officer" do
-            it "redirects to new message page" do
+            before do 
                 sign_in sub_officer
                 get :new
+            end
+            it "redirects to new message page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as head-officer" do
-            it "redirects to new officer page" do
+            before do 
                 sign_in current_officer_login
                 get :new
+            end
+            it "redirects to new officer page" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -116,24 +138,30 @@ RSpec.describe MessagesController do
 
     describe "get/messages #edit" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :edit, params:{id: message1.id}
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When signed in as user and tries to view their message" do
-            it "redirects to edit message page" do
+            before do 
                 sign_in current_user_login
                 get :edit, params:{id: message1.id}
+            end
+            it "redirects to edit message page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as user and tries to view others message" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :edit, params:{id: message2.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to redirect_to user
             end
         end
@@ -142,32 +170,40 @@ RSpec.describe MessagesController do
     
     describe "get/messages #respondMsg" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 get :respondMsg, params:{id: message1.id}
                 expect(response).to redirect_to new_user_login_session_path
+            end
+            it "redirects to login page" do
             end
         end
 
         context "When signed in as user" do
-            it "redirects to user profile page" do
+            before do 
                 sign_in current_user_login
                 get :respondMsg, params:{id: message1.id}
+            end
+            it "redirects to user profile page" do
                 expect(response).to redirect_to user
             end
         end
 
         context "When signed in as officer and responds to his message" do
-            it "redirects to request message page" do
+            before do 
                 sign_in sub_officer
-                 get :respondMsg, params:{id: message1.id}
+                get :respondMsg, params:{id: message1.id}
+            end
+            it "redirects to request message page" do
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as officer and responds to others messages" do
-            it "redirects to request message page" do
+            before do 
                 sign_in current_officer_login
-                 get :respondMsg, params:{id: message1.id}
+                get :respondMsg, params:{id: message1.id}
+            end
+            it "redirects to request message page" do
                 expect(response).to have_http_status(200)
             end
         end
@@ -175,16 +211,20 @@ RSpec.describe MessagesController do
 
     describe "post/messages #create" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 post :create, params:{message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
             end
         end
 
         context "When user signed in" do
-            it "message created successfully" do
+            before do 
                 sign_in current_user_login
                 post :create, params:{message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "message created successfully" do
                 expect(response).to redirect_to Message.last
             end
         end
@@ -192,25 +232,72 @@ RSpec.describe MessagesController do
 
     describe "patch/messages #update" do
         context "When user not signed in" do
-            it "redirects to login page" do
+            before do 
                 patch :update, params:{id: message1.id, message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
                 expect(response).to redirect_to new_user_login_session_path
+            end
+            it "redirects to login page" do
             end
         end
 
         context "When signed in as user and tries to update their message" do
-            it "message updated successfully" do
+            before do 
                 sign_in current_user_login
                 patch :update, params:{id: message1.id, message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "message updated successfully" do
                 expect(response).to redirect_to message1
             end
         end
 
         context "When signed in as user and tries to update others message" do
-            it "message updated successfully" do
+            before do 
                 sign_in current_user_login
                 patch :update, params:{id: message2.id, message: {complaint_id:complaint2.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "message updated successfully" do
                 expect(response).to redirect_to user
+            end
+        end
+    end
+
+    describe "delete/messages #delete" do
+        context "When user not signed in" do
+            before do 
+                delete :destroy, params:{id: message1.id}
+            end
+            it "redirects to login page" do
+                expect(response).to redirect_to new_user_login_session_path
+            end
+        end
+
+        context "When signed in as user and tries to delete message" do
+            before do 
+                sign_in current_user_login
+                delete :destroy, params:{id: message1.id}
+            end
+            it "redirect to user profile page" do
+                expect(response).to redirect_to user
+            end
+        end
+
+        context "When signed in as officer and tries to delete their message," do
+            before do 
+                sign_in current_officer_login
+                delete :destroy, params:{id: message1.id}
+            end
+            it "message deleted successfully" do
+                expect(response).to have_http_status(302)
+            end
+        end
+
+        context "When signed in as officer and tries to delete others message" do
+            before do 
+                sign_in sub_officer
+                delete :destroy, params:{id: message2.id}
+            end
+            it "redirects to officer profile page" do
+                expect(response).to redirect_to subofficer
             end
         end
     end

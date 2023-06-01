@@ -32,29 +32,37 @@ RSpec.describe Api::OfficersController , type: :request do
 
     describe "get/officers #index" do
         context "When user not signed in" do
+            before do
+                get "/api/officers"                
+            end
             it "redirects to login page" do
-                get "/api/officers"
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
+            before do
+                get "/api/officers", params: {access_token: user_token.token}                
+            end
             it "redirects to user profile page" do
-                get "/api/officers", params: {access_token: user_token.token}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as head officer" do
+            before do
+                get "/api/officers", params: {access_token: officer_token.token}                
+            end
             it "redirects to users index" do
-                get "/api/officers", params: {access_token: officer_token.token}
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub officer" do
+            before do
+                get "/api/officers", params: {access_token: sub_officer_token.token}                
+            end
             it "redirects to sub-officers profile index" do
-                get "/api/officers", params: {access_token: sub_officer_token.token}
                 expect(response).to have_http_status(401)
             end
         end
@@ -62,29 +70,37 @@ RSpec.describe Api::OfficersController , type: :request do
 
     describe "get/officers #show" do
         context "When user not signed in" do
+            before do
+                get "/api/officers/#{officer.id}"                
+            end
             it "redirects to login page" do
-                get "/api/officers/#{officer.id}"
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
+            before do
+                get "/api/officers/#{officer.id}", params:{access_token: user_token.token}                
+            end
             it "redirects to user profile page" do
-                 get "/api/officers/#{officer.id}", params:{access_token: user_token.token}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as officer and renders the other officers profile page" do
+            before do
+                get "/api/officers/#{officer.id}", params:{access_token: sub_officer_token.token}                
+            end
             it "redirects to current officer profile page" do
-                 get "/api/officers/#{officer.id}", params:{access_token: sub_officer_token.token}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as head officer" do
+            before do
+                get "/api/officers/#{officer.id}", params:{access_token: officer_token.token}                
+            end
             it "redirects to officers profile page" do
-                 get "/api/officers/#{officer.id}", params:{access_token: officer_token.token}
                 expect(response).to have_http_status(200)
             end
         end
@@ -92,29 +108,37 @@ RSpec.describe Api::OfficersController , type: :request do
     
     describe "get/officers #viewRequestMsg" do
         context "When user not signed in" do
+            before do
+                get "/api/viewRequestMsg"                
+            end
             it "redirects to login page" do
-                get "/api/viewRequestMsg"
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
+            before do
+                get "/api/viewRequestMsg", params:{access_token: user_token.token}                
+            end
             it "redirects to user profile page" do
-                get "/api/viewRequestMsg", params:{access_token: user_token.token}
                 expect(response).to have_http_status(401)
         end
     end
 
         context "When signed in as sub-officer" do
+            before do
+                get "/api/viewRequestMsg", params:{access_token: sub_officer_token.token}                
+            end
             it "redirects to request message page" do
-                 get "/api/viewRequestMsg", params:{access_token: sub_officer_token.token}
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as head-officer" do
+            before do
+                get "/api/viewRequestMsg", params:{access_token: officer_token.token}                
+            end
             it "redirects to request message page" do
-                 get "/api/viewRequestMsg", params:{access_token: officer_token.token}
                 expect(response).to have_http_status(200)
             end
         end
@@ -122,29 +146,37 @@ RSpec.describe Api::OfficersController , type: :request do
 
     describe "post/officers #create" do
         context "When user not signed in" do
+            before do
+                post "/api/officers", params:{officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}                
+            end
             it "redirects to login page" do
-                post "/api/officers", params:{officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
+            before do
+                post "/api/officers", params:{access_token: user_token.token, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}                
+            end
             it "redirects to user profile page" do
-                post "/api/officers", params:{access_token: user_token.token, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as sub-officer" do
+            before do
+                post "/api/officers", params:{access_token: sub_officer_token.token, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}                
+            end
             it "redirects to sub officer profile page" do
-                post "/api/officers", params:{access_token: sub_officer_token.token, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as head-officer" do
+            before do
+                post "/api/officers", params:{access_token: officer_token.token,email: 'officer@example.com', password:'123456', officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}                
+            end
             it "creates new officer successfully" do
-                post "/api/officers", params:{access_token: officer_token.token,email: 'officer@example.com', password:'123456', officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}
                 expect(response).to have_http_status(200)
             end
         end
@@ -152,36 +184,46 @@ RSpec.describe Api::OfficersController , type: :request do
 
     describe "patch/officers #update" do
         context "When user not signed in" do
+            before do
+                patch "/api/officers/#{officer.id}", params:{officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
+            end
             it "redirects to login page" do
-                 patch "/api/officers/#{officer.id}", params:{officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
+            before do
+                patch "/api/officers/#{officer.id}", params:{access_token: user_token.token,  officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
+            end
             it "redirects to users profile page" do
-                 patch "/api/officers/#{officer.id}", params:{access_token: user_token.token,  officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as head officer" do
+            before do
+                patch "/api/officers/#{officer.id}", params:{access_token: officer_token.token,  officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
+            end
             it "officer updated successfully" do
-                 patch "/api/officers/#{officer.id}", params:{access_token: officer_token.token,  officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
                 expect(response).to have_http_status(200)
             end
         end
 
         context "When signed in as sub-officer and try's to edit other officers page" do
+            before do
+                patch "/api/officers/#{officer.id}", params:{access_token: sub_officer_token.token, officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
+            end
             it "redirects to sub-officer profile page" do
-                 patch "/api/officers/#{officer.id}", params:{access_token: sub_officer_token.token, officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as sub-officer and try's to edit his details" do
+            before do
+                patch "/api/officers/#{subofficer.id}", params:{access_token: sub_officer_token.token, officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
+            end
             it "redirects to subofficer edit page" do
-                 patch "/api/officers/#{subofficer.id}", params:{access_token: sub_officer_token.token, officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
                 expect(response).to have_http_status(200)
             end
         end
@@ -189,22 +231,28 @@ RSpec.describe Api::OfficersController , type: :request do
 
     describe "deleter/officers #delete" do
         context "When user not signed in" do
+            before do
+                delete "/api/officers/#{officer.id}"                
+            end
             it "redirects to login page" do
-                delete "/api/officers/#{officer.id}"
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as user" do
+            before do
+                delete "/api/officers/#{officer.id}", params: {access_token: user_token.token}                
+            end
             it "redirects to user profile page" do
-                delete "/api/officers/#{officer.id}", params: {access_token: user_token.token}
                 expect(response).to have_http_status(401)
             end
         end
 
         context "When signed in as officer" do
+            before do
+                delete "/api/officers/#{subofficer.id}", params: {access_token: sub_officer_token.token}                
+            end
             it "redirects to sub-officers profile page" do
-                delete "/api/officers/#{subofficer.id}", params: {access_token: sub_officer_token.token}
                 expect(response).to have_http_status(401)
             end
         end
