@@ -21,8 +21,11 @@
               <td class="p-4 fs-6"><%= message.complaint_id %></td>
               <td class="p-4 fs-6"><%= message.statement %></td>
               <td class="p-4 fs-6"><%= message.dateTime %></td>
-              <td class="p-4 fs-6"><a href="respondMsg/<%= message.id %>">Respond</a></td>
-              <td class="p-4 fs-6"><%= link_to 'Destroy', message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td class="p-4 fs-6"><a href="respondMsg/<%= message.id %>"><i class="fa-solid fa-reply fa-xl icon" data-toggle="tooltip" data-placement="top" title="Respond"></i></a></td>
+              <td class="p-4 fs-6"><%= link_to message, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                  <i class="fa-solid fa-trash fa-xl icon" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>

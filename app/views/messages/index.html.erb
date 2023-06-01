@@ -26,9 +26,14 @@
               <% if @message && @message.message_type=="User" %>
                 <td class="p-4 fs-6"><%= message.status.status %></td>
               <% end %>
-              <td class="p-4 fs-6"><%= link_to 'Show', message %></td>
-              <td class="p-4 fs-6"><%= link_to 'Edit', edit_message_path(message) %></td>
-              <td class="p-4 fs-6"><%= link_to 'Destroy', message, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td class="p-4 fs-6"><%= link_to edit_message_path(message) do %>
+                  <i class="icon fa-solid fa-pen-to-square fa-xl" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                <% end %>
+              </td>
+              <td class="p-4 fs-6"><%= link_to message, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                  <i class="fa-solid fa-trash fa-xl icon" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         </tbody>

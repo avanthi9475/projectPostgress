@@ -58,64 +58,33 @@ belongs_to :complaint, foreign_key: 'complaint_id'
     has_one :status, as: :statusable, dependent: :destroy
     has_one_attached :userPhotoCopy
     has_one_attached :aadharCardCopy
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+when responded/resolved view history for complaints & messages
+mail catcher
+complaint statement also included
+live messages
+add crime_fir in active admin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

@@ -55,12 +55,13 @@ class MessagesController < ApplicationController
       @message.status = @status
     else
       @msg = Message.find_by(id: params[:message][:parent_id])
-      @status = @msg.status
-      @status.status = "Responded"
+      @msg.status.update(status: 'Responded')
+      @status = Status.new({status: "Sent"})
+      @message.status = @status
     end
     # @message = Message.new(@msg.attributes)
     respond_to do |format|
-      if @message.save && (current_user_login.role=='user' || @status.save)
+      if @message.save &&  @status.save
         format.html { redirect_to message_url(@message), notice: "Message was successfully created." }
         format.json { render :show, status: :created, location: @message }
       else
@@ -91,12 +92,21 @@ class MessagesController < ApplicationController
 
   # DELETE /messages/1
   def destroy
-    @message.destroy
-
-    respond_to do |format|
-      format.html { redirect_to messages_url, notice: "Message was successfully destroyed." }
-      format.json { head :no_content }
+    if current_user_login.role=='user'
+      @messages = Current.user.response_messages
+    else
+      @messages = Current.user.request_messages
     end
+    @message = Message.find_by(id: params[:id].to_i)
+    if (@messages.size>=1 && @messages.include?(@message)) || (current_user_login.role=='officer' && Current.user.role=='DSP')
+      @message.destroy
+      respond_to do |format|
+        format.html { redirect_to messages_url, notice: "Message was successfully destroyed." }
+        format.json { head :no_content}
+      end
+    else
+      redirect_user("Restricted Access")
+    end    
   end
 
   private

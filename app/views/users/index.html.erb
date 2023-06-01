@@ -21,9 +21,14 @@
               <td class="p-4 fs-6"><%= user.age %></td>
               <td class="p-4 fs-6"><%= user.location %></td>
               <td class="p-4 fs-6"><%= user.noOfComplaintsMade %></td>
-              <td class="p-4 fs-6"><%= link_to 'Show', user %></td>
-              <td class="p-4 fs-6"><%= link_to 'Edit', edit_user_path(user) %></td>
-              <td class="p-4 fs-6"><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td class="p-4 fs-6"><%= link_to edit_user_path(user) do %>
+                <i class="icon fa-solid fa-pen-to-square fa-xl" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+              <% end %>
+              </td>
+              <!-- <td class="p-4 fs-6"><%= link_to user, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                <i class="fa-solid fa-trash fa-xl icon" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+              <% end %>
+              </td> -->
             </tr>
           <% end %>
         </tbody>

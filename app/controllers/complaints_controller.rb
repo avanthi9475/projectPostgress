@@ -102,11 +102,11 @@ class ComplaintsController < ApplicationController
     @complaint = Complaint.new(complaint_params)
     @officer = Officer.find_by(role: 'DSP')
     @user = User.find_by(id: params[:complaint][:user_id])  
+    @user.update(noOfComplaintsMade: @user.noOfComplaintsMade+1)
     respond_to do |format|
       if @complaint.save 
-        # @user.noOfComplaintsMade = @user.noOfComplaintsMade + 1
         @officers_complaints = OfficersComplaint.new(officer_id: @officer.id, complaint_id: @complaint.id, IsHead: "Yes")
-        if @officers_complaints.save # && @user.save
+        if @officers_complaints.save
           format.html { redirect_to complaint_url(@complaint), notice: "Complaint was successfully created." }
           format.json { render :show, status: :created, location: @complaint }
         else

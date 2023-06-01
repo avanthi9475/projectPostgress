@@ -7,7 +7,7 @@ class UsersController < ApplicationController
     if current_user_login.role=='officer' && Current.user.role=='DSP'
       @users = User.all
     elsif current_user_login.role=='officer'
-      @users = Current.user.users
+      @users = Current.user.users.uniq
     else
       redirect_user("Unauthorized Access")
     end
@@ -108,11 +108,15 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   def destroy
-    @user.destroy
+    if current_user_login.role=='officer' && Current.user.role=='DSP'
+      @user.destroy
 
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: "User was successfully destroyed." }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to users_url, notice: "User was successfully destroyed." }
+        format.json { head :no_content }
+      end
+    else
+      redirect_user("Restricted Access")
     end
   end
 

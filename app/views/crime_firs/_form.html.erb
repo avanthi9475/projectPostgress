@@ -36,7 +36,7 @@
     <%= form.datetime_select :dateTime_of_crime, class: "form-control shadow shadow-sm" %>
   </div>
 
-  <% if crime_fir.present? && crime_fir.status.present? %>
+  <% if crime_fir.id!=nil %>
   <div class="field form-group p-2">
     <%= form.label :status, class: "form-label fw-bold fs-5 py-2" %>
     <%= form.select :status, options_for_select(['Inprogress' , 'Resolved'], crime_fir.status.status),{ :name => 'status'},{ :class  => "form-select shadow shadow-sm"}%>

@@ -22,9 +22,14 @@
               <td class="p-4 fs-6"><%= officer.age %></td>
               <td class="p-4 fs-6"><%= officer.location %></td>
               <td class="p-4 fs-6"><%= officer.role %></td>
-              <td class="p-4 fs-6"><%= link_to 'Show', officer %></td>
-              <td class="p-4 fs-6"><%= link_to 'Edit', edit_officer_path(officer) %></td>
-              <td class="p-4 fs-6"><%= link_to 'Destroy', officer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+              <td class="p-4 fs-6"><%= link_to edit_officer_path(officer) do %>
+                  <i class="icon fa-solid fa-pen-to-square fa-xl" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                <% end %>
+              </td>
+              <!--  <td class="p-4 fs-6"><%= link_to officer, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                  <i class="fa-solid fa-trash fa-xl icon" data-toggle="tooltip" data-placement="top" title="Delete"></i>
+                <% end %>
+              </td> -->
             </tr>
           <% end %>
         </tbody>

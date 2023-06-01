@@ -5,7 +5,7 @@ class OfficersController < ApplicationController
   # GET /officers
   def index
     if current_user_login.role=='officer' && Current.user.role=='DSP'
-      @officers = Officer.all
+      @officers = Officer.all.where.not("role = ?", 'DSP')
     else
       redirect_user("Unauthorized Access")
     end
@@ -81,11 +81,15 @@ class OfficersController < ApplicationController
 
   # DELETE /officers/1 
   def destroy
-    @officer.destroy
+    if current_user_login.role=='officer' && Current.user.role=='DSP'
+      @officer.destroy
 
-    respond_to do |format|
-      format.html { redirect_to officers_url, notice: "Officer was successfully destroyed." }
-      format.json { head :no_content }
+      respond_to do |format|
+        format.html { redirect_to officers_url, notice: "Officer was successfully destroyed." }
+        format.json { head :no_content }
+      end
+    else
+      redirect_user("Restricted Access")
     end
   end
 

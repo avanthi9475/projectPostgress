@@ -1,7 +1,7 @@
 class Status < ApplicationRecord
     belongs_to :statusable, polymorphic: true
 
-    enum status: {Inprogress:'Inprogress', Responded: 'Responded', Pending: 'Pending', Resolved: 'Resolved'}
+    enum status: {Inprogress:'Inprogress', Responded: 'Responded', Pending: 'Pending', Resolved: 'Resolved', Sent: 'Sent', Received: 'Received'}
 
     validates :status, presence: true
     

@@ -17,8 +17,8 @@
     </div>
   <% else %>
     <div class="form-group p-2">
-      <label class= "form-label fw-bold fs-5 py-2" for="user_id">User-ID</label>
-      <%= form.select :user_id, options_for_select(User.all.map { |c| [c.name, c.id] }), { :multiple => false, include_blank: 'Select'}, {class: "form-select shadow shadow-sm ", required: true}  %>
+      <label class= "form-label fw-bold fs-5 py-2" for="user_id">User</label>
+      <%= form.select :user_id, options_for_select(User.all.map { |c| [c.name, c.id] }, complaint.user ? complaint.user.id : nil), { include_blank: 'Select'}, {class: "form-select shadow shadow-sm ", required: true}  %>
     </div>
   <% end %>
 
@@ -34,7 +34,7 @@
   
   <div class="form-group p-2">
     <label class= "form-label fw-bold fs-5 py-2" for="dateTime">Date & Time</label>
-    <input class="form-control shadow shadow-sm"  type="datetime-local" name="complaint[dateTime]" value=<%= complaint.dateTime%> >
+    <input class="form-control shadow shadow-sm"  type="datetime-local" name="complaint[dateTime]" value=<% if complaint.dateTime %><%= complaint.dateTime.strftime('%Y-%m-%dT%H:%M') %><% end %> >
   </div>
 
   <div class="actions form-group d-flex justify-content-center py-4">

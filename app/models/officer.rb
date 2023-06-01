@@ -11,7 +11,7 @@ class Officer < ApplicationRecord
     validates :location, presence: true, format: { with: /\A[a-zA-Z]+\z/ }  
     validates :role, presence: true, format: { with: /\A[a-zA-Z]+\z/ }
 
-    enum role: {DSP: 'DSP', Inspector: 'Inspector', Sub_Inspector: 'Sub-Inspector'}
+    enum role: {DSP: 'DSP', Inspector: 'Inspector', SubInspector: 'SubInspector'}
 
     def is_head_for_complaint(complaint_id, officer_id)
         OfficersComplaint.find_by(complaint_id: complaint_id, officer_id: officer_id)&.IsHead
