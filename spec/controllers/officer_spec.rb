@@ -61,6 +61,16 @@ RSpec.describe OfficersController do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :show, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
+
         context "When signed in as user" do
             before do 
                 sign_in current_user_login
@@ -140,6 +150,16 @@ RSpec.describe OfficersController do
             end
             it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :edit, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
             end
         end
 
@@ -277,6 +297,16 @@ RSpec.describe OfficersController do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                patch :update , params:{id: 0, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
+
         context "When signed in as user" do
             before do 
                 sign_in current_user_login
@@ -325,6 +355,16 @@ RSpec.describe OfficersController do
             end
             it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                delete :destroy, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
             end
         end
 

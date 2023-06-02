@@ -41,6 +41,41 @@ RSpec.describe Complaint, type: :model do
             end
         end
 
+        context "When value is alphabetic" do
+            let(:complaint) {build(:complaint, dateTime: "abcd")}
+            it "throws error" do
+                expect(complaint.errors).to include(:dateTime)
+            end
+        end
+
+        context "When time is invalid" do
+            let(:complaint) {build(:complaint, dateTime: "124:49:28")}
+            it "throws error" do
+                expect(complaint.errors).to include(:dateTime)
+            end
+        end
+
+        context "When month is invalid" do
+            let(:complaint) {build(:complaint, dateTime: "2023-24-24")}
+            it "throws error" do
+                expect(complaint.errors).to include(:dateTime)
+            end
+        end
+
+        context "When year is invalid" do
+            let(:complaint) {build(:complaint, dateTime: "2-24-0")}
+            it "throws error" do
+                expect(complaint.errors).to include(:dateTime)
+            end
+        end
+
+        context "When date is invalid" do
+            let(:complaint) {build(:complaint, dateTime: "2023-2")}
+            it "throws error" do
+                expect(complaint.errors).to include(:dateTime)
+            end
+        end
+
         context "When value is NIL" do
             let(:complaint) {build(:complaint, dateTime: nil)}
             it "throws error" do

@@ -48,6 +48,13 @@ RSpec.describe CrimeFir, type: :model do
             end
         end
 
+        context "When value is invalid" do
+            let(:crime_fir) {build(:crime_fir, dateTime_of_crime: "2023-25-24 194:49:28")}
+            it "throws error" do
+                expect(crime_fir.errors).to include(:dateTime_of_crime)
+            end
+        end
+
         context "When value is NIL" do
             let(:crime_fir) {build(:crime_fir, dateTime_of_crime: nil)}
             it "throws error" do

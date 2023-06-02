@@ -45,7 +45,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 get "/api/officers", params: {access_token: user_token.token}                
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -63,7 +63,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 get "/api/officers", params: {access_token: sub_officer_token.token}                
             end
             it "redirects to sub-officers profile index" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end
@@ -76,6 +76,15 @@ RSpec.describe Api::OfficersController , type: :request do
             it "redirects to login page" do
                 expect(response).to have_http_status(401)
             end
+        end 
+        
+        context "When redirects to invalid id" do
+            before do 
+                get "/api/officers/0", params:{access_token: user_token.token}                
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
         end
 
         context "When signed in as user" do
@@ -83,7 +92,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 get "/api/officers/#{officer.id}", params:{access_token: user_token.token}                
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -92,7 +101,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 get "/api/officers/#{officer.id}", params:{access_token: sub_officer_token.token}                
             end
             it "redirects to current officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -121,7 +130,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 get "/api/viewRequestMsg", params:{access_token: user_token.token}                
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
         end
     end
 
@@ -159,7 +168,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 post "/api/officers", params:{access_token: user_token.token, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}                
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -168,7 +177,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 post "/api/officers", params:{access_token: sub_officer_token.token, officer:{email: 'officer@example.com', name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' }}                
             end
             it "redirects to sub officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -192,12 +201,22 @@ RSpec.describe Api::OfficersController , type: :request do
             end
         end
 
+
+        context "When redirects to invalid id" do
+            before do 
+                patch "/api/officers/0", params:{access_token: user_token.token,  officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user" do
             before do
                 patch "/api/officers/#{officer.id}", params:{access_token: user_token.token,  officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
             end
             it "redirects to users profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -215,7 +234,7 @@ RSpec.describe Api::OfficersController , type: :request do
                 patch "/api/officers/#{officer.id}", params:{access_token: sub_officer_token.token, officer:{name: 'Avanthika', age:23, location:'Coimbatore', password:'123456', role:'Inspector' } }                
             end
             it "redirects to sub-officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -239,24 +258,31 @@ RSpec.describe Api::OfficersController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                delete "/api/officers/0", params: {access_token: user_token.token}                
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user" do
             before do
                 delete "/api/officers/#{officer.id}", params: {access_token: user_token.token}                
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
-        context "When signed in as officer" do
+        context "When signed in as sub-officer" do
             before do
                 delete "/api/officers/#{subofficer.id}", params: {access_token: sub_officer_token.token}                
             end
             it "redirects to sub-officers profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end
-
-
 end

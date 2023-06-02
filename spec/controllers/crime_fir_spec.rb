@@ -73,6 +73,16 @@ RSpec.describe CrimeFirsController do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :show, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
+
         context "When signed in as user" do
             before do 
                 sign_in current_user_login
@@ -175,6 +185,16 @@ RSpec.describe CrimeFirsController do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :edit, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
+
         context "When signed in as head officer" do
             before do 
                 sign_in current_officer_login
@@ -256,6 +276,16 @@ RSpec.describe CrimeFirsController do
             end
             it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                patch :update, params:{id: 0, crime_fir: {user_id:user.id, complaint_id:complaint.id, under_section:302, crime_category:'Robery', dateTime_of_crime: "2023-05-24 16:03:08" }}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
             end
         end
 

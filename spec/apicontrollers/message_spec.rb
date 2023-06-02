@@ -75,6 +75,15 @@ RSpec.describe Api::MessagesController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                get "/api/messages/0", params:{access_token: user_token.token}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user and tries to view their message" do
             before do 
                 get  "/api/messages/#{message1.id}", params: {access_token: user_token.token}
@@ -124,12 +133,21 @@ RSpec.describe Api::MessagesController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                patch "/api/messages/0", params:{access_token: user_token.token, message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user and tries to update message, " do
             before do 
                 patch "/api/messages/#{message1.id}", params:{access_token: user_token.token, message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
             end
-            it "message updated successfully" do
-                expect(response).to have_http_status(401)
+            it "restricted access" do
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -147,7 +165,7 @@ RSpec.describe Api::MessagesController , type: :request do
                 patch "/api/messages/#{message2.id}", params:{access_token: sub_officer_token.token, message: {statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
             end
             it "redirects to officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end
@@ -162,16 +180,25 @@ RSpec.describe Api::MessagesController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                delete "/api/messages/0", params:{access_token: user_token.token}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user and tries to delete message" do
             before do 
                 delete "/api/messages/#{message1.id}", params:{access_token: user_token.token}
             end
             it "redirect to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
-        context "When signed in as officer and tries to delete their message," do
+        context "When signed in as sub officer and tries to delete their message," do
             before do 
                 delete "/api/messages/#{message1.id}", params:{access_token: sub_officer_token.token}
             end
@@ -185,7 +212,7 @@ RSpec.describe Api::MessagesController , type: :request do
                 delete "/api/messages/#{message2.id}", params:{access_token: sub_officer_token.token}
             end
             it "redirects to officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end

@@ -75,6 +75,15 @@ RSpec.describe Api::CrimeFirsController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                get "/api/crime_firs/0", params:{access_token: user_token.token}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user" do
             before do 
                 get "/api/crime_firs/#{crime_fir1.id}", params: {access_token: user_token.token}
@@ -112,7 +121,7 @@ RSpec.describe Api::CrimeFirsController , type: :request do
         end
     end
 
-    describe "get/crime_fir #create" do
+    describe "post/crime_fir #create" do
         context "When user not signed in" do
             before do 
                 post "/api/crime_firs"
@@ -124,7 +133,7 @@ RSpec.describe Api::CrimeFirsController , type: :request do
 
         context "When signed in as user" do
             before do 
-                post "/api/crime_firs", params: {access_token: officer_token.token, crime_fir: {user_id:user.id, complaint_id:complaint.id, under_section:302, crime_category:'Robery', dateTime_of_crime: "2023-05-24 16:03:08" }}
+                post "/api/crime_firs", params: {access_token: user_token.token, crime_fir: {user_id:user.id, complaint_id:complaint.id, under_section:302, crime_category:'Robery', dateTime_of_crime: "2023-05-24 16:03:08" }}
             end
             it "redirects to user profile page" do
                 expect(response).to have_http_status(403)
@@ -161,6 +170,15 @@ RSpec.describe Api::CrimeFirsController , type: :request do
                 expect(response).to have_http_status(401)
             end
         end
+
+        context "When redirects to invalid id" do
+            before do 
+                patch "/api/crime_firs/0", params:{access_token: user_token.token, crime_fir: {under_section:302, crime_category:'Robery', dateTime_of_crime: "2023-05-24 16:03:08" }}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end#{crime_fir1.id}
 
         context "When signed in as user" do
             before do 

@@ -76,6 +76,16 @@ RSpec.describe MessagesController do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :show, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
+
         context "When signed in as user and tries to view their message" do
             before do 
                 sign_in current_user_login
@@ -148,6 +158,16 @@ RSpec.describe MessagesController do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :edit, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
+
         context "When signed in as user and tries to view their message" do
             before do 
                 sign_in current_user_login
@@ -186,6 +206,16 @@ RSpec.describe MessagesController do
                 get :respondMsg, params:{id: message1.id}
             end
             it "redirects to user profile page" do
+                expect(response).to redirect_to user
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                get :respondMsg, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
                 expect(response).to redirect_to user
             end
         end
@@ -251,6 +281,16 @@ RSpec.describe MessagesController do
                 expect(response).to redirect_to message1
             end
         end
+        
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                patch :update, params:{id: 0, message: {complaint_id:complaint.id, statement:'Please update about my complaint status', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
+            end
+        end
 
         context "When signed in as user and tries to update others message" do
             before do 
@@ -270,6 +310,16 @@ RSpec.describe MessagesController do
             end
             it "redirects to login page" do
                 expect(response).to redirect_to new_user_login_session_path
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                sign_in current_user_login
+                delete :destroy, params:{id: 0}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to redirect_to user
             end
         end
 

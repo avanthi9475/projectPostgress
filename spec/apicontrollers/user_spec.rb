@@ -36,7 +36,7 @@ RSpec.describe Api::UsersController , type: :request do
                 get "/api/users", params: {access_token: user_token.token}
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -60,6 +60,15 @@ RSpec.describe Api::UsersController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                get "/api/users/0", params: {access_token: user_token.token}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user" do
             before do
                 get "/api/users/#{user.id}", params: {access_token: user_token.token}
@@ -74,7 +83,7 @@ RSpec.describe Api::UsersController , type: :request do
                 get "/api/users/#{anotherUser.id}", params: {access_token: user_token.token}
             end
             it "redirects to current user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -101,7 +110,7 @@ RSpec.describe Api::UsersController , type: :request do
                 get "/api/users/#{anotherUser.id}", params: {access_token: sub_officer_token.token}
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end
@@ -130,7 +139,7 @@ RSpec.describe Api::UsersController , type: :request do
                 get "/api/viewResponse", params: {access_token: sub_officer_token.token}
             end
             it "redirects to sub-officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -139,7 +148,7 @@ RSpec.describe Api::UsersController , type: :request do
                 get "/api/viewResponse", params: {access_token: officer_token.token}
             end
             it "redirects to head officer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end
@@ -192,6 +201,15 @@ RSpec.describe Api::UsersController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                patch "/api/users/0" , params:{access_token: user_token.token, user: {name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user" do
             before do
                 patch "/api/users/#{user.id}" , params:{access_token: user_token.token, user: {name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
@@ -206,7 +224,7 @@ RSpec.describe Api::UsersController , type: :request do
                 patch "/api/users/#{anotherUser.id}" , params:{access_token: user_token.token, user: {name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
             end
             it "redirects to current user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 
@@ -233,7 +251,7 @@ RSpec.describe Api::UsersController , type: :request do
                 patch "/api/users/#{anotherUser.id}" , params:{access_token: sub_officer_token.token, user: {name: 'Avanthika', age:23, location:'Coimbatore', noOfComplaintsMade: 0}}
             end
             it "redirects to subofficer profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
     end
@@ -248,12 +266,21 @@ RSpec.describe Api::UsersController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                delete "/api/users/0", params: {access_token: user_token.token}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user" do
             before do
                 delete "/api/users/#{user.id}", params: {access_token: user_token.token}
             end
             it "redirects to user profile page" do
-                expect(response).to have_http_status(401)
+                expect(response).to have_http_status(403)
             end
         end
 

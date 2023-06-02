@@ -82,6 +82,15 @@ RSpec.describe Api::ComplaintsController , type: :request do
             end
         end
 
+        context "When redirects to invalid id" do
+            before do 
+                get "/api/complaints/0", params:{access_token: user_token.token}
+            end
+            it "notices 'invalid id'" do
+                expect(response).to have_http_status(404)
+            end
+        end
+
         context "When signed in as user and tries to access other users complaints" do
             before do 
                 get "/api/complaints/#{complaint2.id}", params:{access_token: user_token.token}
@@ -135,6 +144,15 @@ RSpec.describe Api::ComplaintsController , type: :request do
             end
             it "redirects to handledByOfficers page" do
                 expect(response).to have_http_status(200)
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                get "/api/handledByOfficer/0", params: {access_token: user_token.token}
+            end
+            it "notice 'invalid id'" do
+                expect(response).to have_http_status(404)
             end
         end
 
@@ -267,6 +285,15 @@ RSpec.describe Api::ComplaintsController , type: :request do
             end
             it "redirects to user complaints page" do
                 expect(response).to have_http_status(200)
+            end
+        end
+
+        context "When redirects to invalid id" do
+            before do 
+                patch "/api/complaints/0", params:{access_token: user_token.token, complaint:{user_id: user.id, statement: 'Please update about my complaint status', location:'Coimbatore', dateTime: "2023-05-24 16:03:08" }}
+            end
+            it "notice 'invalid id'" do
+                expect(response).to have_http_status(404)
             end
         end
 
