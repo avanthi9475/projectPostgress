@@ -45,7 +45,8 @@ self join
 has_one_through - 
 
 officer.request_messages
-  Message Load (0.7ms)  SELECT "messages".* FROM "messages" INNER JOIN "complaints" ON "messages"."complaint_id" = "complaints"."id" INNER JOIN "officers_complaints" ON "complaints"."id" = "officers_complaints"."complaint_id" WHERE "officers_complaints"."officer_id" = $1 AND "messages"."message_type" = $2  [["officer_id", 1], ["message_type", "User"]]
+  Message Load (0.7ms)  SELECT "messages".* FROM "messages" INNER JOIN "complaints" ON "messages"."compla
+  <p id="notice"><%= notice %></p>int_id" = "complaints"."id" INNER JOIN "officers_complaints" ON "complaints"."id" = "officers_complaints"."complaint_id" WHERE "officers_complaints"."officer_id" = $1 AND "messages"."message_type" = $2  [["officer_id", 1], ["message_type", "User"]]
   has_many :request_messages, -> { where(message_type: 'User') }, through: :complaints, source: :messages
   
 rails generate scaffold complainantProof aadhar_no:integer aadharCardCopy:binary photoCopy:binary

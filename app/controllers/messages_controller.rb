@@ -51,18 +51,12 @@ class MessagesController < ApplicationController
   # POST /messages
   def create
     @message = Current.user.messages.new(message_params)
-    if(current_user_login.role=='user')
-      @status = Status.new({status: "Sent"})
-      @message.status = @status
-    else
+    if(current_user_login.role=='officer')
       @msg = Message.find_by(id: params[:message][:parent_id])
       @msg.status.update(status: 'Responded')
-      @status = Status.new({status: "Sent"})
-      @message.status = @status
     end
-    # @message = Message.new(@msg.attributes)
     respond_to do |format|
-      if @message.save &&  @status.save
+      if @message.save
         format.html { redirect_to message_url(@message), notice: "Message was successfully created." }
         format.json { render :show, status: :created, location: @message }
       else
@@ -101,9 +95,16 @@ class MessagesController < ApplicationController
     @message = Message.find_by(id: params[:id].to_i)
     if (@messages.size>=1 && @messages.include?(@message)) || (current_user_login.role=='officer' && Current.user.role=='DSP')
       @message.destroy
-      respond_to do |format|
-        format.html { redirect_to messages_url, notice: "Message was successfully destroyed." }
-        format.json { head :no_content}
+      if current_user_login.role=='user'
+        respond_to do |format|
+          format.html { redirect_to viewResponse_path, notice: "Message was successfully destroyed." }
+          format.json { head :no_content}
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to viewRequestMsg_path, notice: "Message was successfully destroyed." }
+          format.json { head :no_content}
+        end
       end
     else
       redirect_user("Restricted Access")
