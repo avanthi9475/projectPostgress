@@ -8,10 +8,12 @@ FactoryBot.define do
 
     trait :for_user do
       association :message, factory: :user
+      statement { "Please update about my complaint status" }
     end
 
     trait :for_officer do
       association :message, factory: :officer
+      statement { "The process is ongoing" }
     end
 
   end

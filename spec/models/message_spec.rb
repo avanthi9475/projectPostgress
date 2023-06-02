@@ -83,4 +83,24 @@ RSpec.describe Message, type: :model do
             end
         end
     end
+
+    describe "callback methods " do
+        context "create_status" do
+            let(:user) {create(:user)}
+            let(:complaint) {create(:complaint, user_id:user.id)}
+            let(:message) {create(:message, :for_user, complaint_id:complaint.id)}
+            it "creates a new record in status model" do
+                expect(message.create_status).to eq(true)
+            end
+        end
+
+        context "create_status" do
+            let(:user) {create(:user)}
+            let(:complaint) {create(:complaint, user_id:user.id)}
+            let(:message) {build(:message, :for_user, complaint_id:complaint.id)}
+            it "returns false" do
+                expect(message.create_status).to eq(false)
+            end
+        end
+    end
 end

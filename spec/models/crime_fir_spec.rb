@@ -140,6 +140,15 @@ RSpec.describe CrimeFir, type: :model do
                 expect(crime_fir.create_status).to eq(true)
             end
         end
+
+        context "create_status" do
+            let(:user) {create(:user)}
+            let(:complaint) {create(:complaint, user_id:user.id)}
+            let(:crime_fir) {build(:crime_fir, user_id:user.id, complaint_id:complaint.id)}
+            it "returns false" do
+                expect(crime_fir.create_status).to eq(false)
+            end
+        end
       end
 
 end
