@@ -1,6 +1,6 @@
 class MessagesController < ApplicationController
   before_action :authenticate_user_login!
-  before_action :set_message, only: %i[ show edit update destroy ]
+  before_action :set_message, only: %i[ show edit update destroy respondMsg]
   before_action :check_for_messages
 
   # GET /messages

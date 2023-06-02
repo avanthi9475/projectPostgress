@@ -1,4 +1,6 @@
 class Api::ComplaintsController < Api::ApiController 
+  before_action :set_complaint, only: %i[ show update destroy handledByOfficer ]
+
   # GET /complaints
   def index 
     if current_user.present? 
@@ -29,7 +31,7 @@ class Api::ComplaintsController < Api::ApiController
           render json: {error: 'You are not authorized to view others complaints'}, status: 403
         end
       else
-        render json: {error: 'Complaint Not Found'}, status: 204
+        render json: {error: 'Complaint Not Found'}, status: 404
       end
     else
       render json: {error: 'Restricted Access'}, status: 403
@@ -46,7 +48,7 @@ class Api::ComplaintsController < Api::ApiController
           render json: {notice: 'You have not made any complaints'}, status: 204
         end
       else
-        render json: {error: 'User Not Found'}, status: 204
+        render json: {error: 'User Not Found'}, status: 404
       end
     else
       render json: {error: 'Restricted Access'}, status: 403
@@ -69,7 +71,7 @@ class Api::ComplaintsController < Api::ApiController
           render json: {error: 'You are not authorized to view others complaints'}, status: 403
         end
       else
-        render json: {error: 'Complaint Not Found'}, status: 204
+        render json: {error: 'Complaint Not Found'}, status: 404
       end
     else
       render json: {error: 'Restricted Access'}, status: 403
@@ -88,10 +90,10 @@ class Api::ComplaintsController < Api::ApiController
           if @officers_complaints.save
             render json: @complaint, status: 200
           else
-            render json: {error: @officers_complaints.errors.full_messages}, status: 403
+            render json: {error: @officers_complaints.errors.full_messages}, status: 204
           end
         else
-          render json: {error: @complaint.errors.full_messages}, status: 403
+          render json: {error: @complaint.errors.full_messages}, status: 204
         end
       else
         @officer = Officer.find_by(role: 'DSP')
@@ -101,10 +103,10 @@ class Api::ComplaintsController < Api::ApiController
           if @officers_complaints.save
             render json: @complaint, status: 200
           else
-            render json: {error: @officers_complaints.errors.full_messages}, status: 403
+            render json: {error: @officers_complaints.errors.full_messages}, status: 204
           end
         else
-          render json: {error: 'User Not Found'}, status: 204
+          render json: {error: 'User Not Found'}, status: 404
         end
       end
     else
@@ -134,14 +136,14 @@ class Api::ComplaintsController < Api::ApiController
             if @complaint.save
               render json: @complaint, status: 200
             else
-              render json: {error: @complaint.errors.full_messages}, status: 403
+              render json: {error: @complaint.errors.full_messages}, status: 204
             end
           end
         else
           render json: {error: 'You are not authorized to edit others complaints'}, status: 403
         end
       else
-        render json: {error: 'Complaint Not Found'}, status: 204
+        render json: {error: 'Complaint Not Found'}, status: 404
       end
     else
       render json: {error: 'Restricted Access'}, status: 403
@@ -158,20 +160,27 @@ class Api::ComplaintsController < Api::ApiController
           if @complaint.destroy
             render json: { message: "Complaint deleted successfully" } , status: 200
           else
-            render json: {error: @complaint.errors.full_messages} , status: 404
+            render json: {error: @complaint.errors.full_messages} , status: 204
           end
         else
-          render json: {error: 'You are not authorized to delete others complaints'}, status: 404
+          render json: {error: 'You are not authorized to delete others complaints'}, status: 403
         end
       else
-        render json: {error: 'Complaint does not exist'}, status: 403
+        render json: {error: 'Complaint does not exist'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 404
+      render json: {error: 'Unauthorized Access'}, status: 401
     end
   end
 
   private
+
+    def set_complaint
+      @complaint = Complaint.find_by(id: params[:id])
+      unless @complaint 
+        render json: {error: 'Complaint does not exist'}, status: 404
+      end
+    end
 
     # Only allow a list of trusted parameters through.
     def complaint_params

@@ -1,4 +1,5 @@
 class Api::CrimeFirsController < Api::ApiController 
+  before_action :set_crimefir, only: %i[ show edit update destroy ]
 
   def index
     if current_user.present? && current_user.role=='officer'
@@ -39,16 +40,16 @@ class Api::CrimeFirsController < Api::ApiController
           if @crime_fir.save # &&  @status.save 
             render json: @crime_fir, status: 200
           else
-            render json: {error: @crime_fir.errors.full_messages}, status: 403
+            render json: {error: @crime_fir.errors.full_messages}, status: 204
           end
         else
-          render json: {error: 'Complaint not found'}, status: 403
+          render json: {error: 'Complaint not found'}, status: 404
         end
       else
-        render json: {error: 'User not found'}, status: 403
+        render json: {error: 'User not found'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end 
 
@@ -97,7 +98,7 @@ class Api::CrimeFirsController < Api::ApiController
           render json: {error: @crime_fir.errors.full_messages}, status: 403
         end
       else
-        render json: {error: 'FIR not found'}, status: 204
+        render json: {error: 'FIR not found'}, status: 404
       end
     else
       render json: {error: 'Restricted Access'}, status: 403
@@ -105,6 +106,13 @@ class Api::CrimeFirsController < Api::ApiController
   end
 
   private
+
+    def set_crimefir
+      @crime_fir = CrimeFir.find_by(id: params[:id])
+      unless @crime_fir 
+        render json: {error: 'FIR not found'}, status: 404
+      end
+    end
 
     def crime_fir_params
       params.require(:crime_fir).permit(:user_id, :complaint_id, :under_section, :crime_category, :dateTime_of_crime)

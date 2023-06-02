@@ -1,5 +1,5 @@
 class ComplaintsController < ApplicationController
-  before_action :set_complaint, only: %i[ show edit update destroy ]
+  before_action :set_complaint, only: %i[ show edit update destroy handledByOfficer ]
   before_action :authenticate_user_login!
   before_action :check_for_messages
 

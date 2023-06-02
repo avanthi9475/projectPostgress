@@ -1,4 +1,5 @@
 class Api::UsersController < Api::ApiController   
+  before_action :set_user, only: %i[ show edit update destroy ]
 
   def index
     if current_user.present? && current_user.role=='officer' && current_userlogin.present? && current_userlogin.role=='DSP'
@@ -6,10 +7,10 @@ class Api::UsersController < Api::ApiController
       if @users && @users.size>=1
         render json: @users, status: 200
       else
-        render json: {error: 'User Not Found'}, status: 204
+        render json: {error: 'User Not Found'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -20,10 +21,10 @@ class Api::UsersController < Api::ApiController
       if @user 
         render json: @user, status: 200
       else
-        render json: {error: 'User Not Found'}, status: 204
+        render json: {error: 'User Not Found'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -36,7 +37,7 @@ class Api::UsersController < Api::ApiController
         render json: 'You Have Not Received Any Respond Messages', status: 204
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -49,13 +50,13 @@ class Api::UsersController < Api::ApiController
         if @login.save && @user.save
           render json: @user, status: 200
         else
-          render json: {error: @login.errors.full_messages}, status: 403
+          render json: {error: @login.errors.full_messages}, status: 204
         end
       else
-        render json: {error: 'Role can only be user'}, status: 403
+        render json: {error: 'Role can only be user'}, status: 400
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -76,16 +77,16 @@ class Api::UsersController < Api::ApiController
           if @user.save
             render json: @user, status: 200
           else
-            render json: {error: @login.errors.full_messages}, status: 403
+            render json: {error: @login.errors.full_messages}, status: 204
           end
         else
-          render json: {error: 'User does not exist'}, status: 204
+          render json: {error: 'User does not exist'}, status: 404
         end
       else
-        render json: {error: 'Email ID cannot be changed'}, status: 403
+        render json: {error: 'Email ID cannot be changed'}, status: 400
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -97,17 +98,24 @@ class Api::UsersController < Api::ApiController
         if @user.destroy
           render json: { message: "User deleted successfully" } , status: 200
         else
-          render json: {error: @user.errors.full_messages} , status: 403
+          render json: {error: @user.errors.full_messages} , status: 204
         end
       else
-        render json: {error: 'User does not exist'}, status: 204
+        render json: {error: 'User does not exist'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
   private
+
+  def set_user
+    @user = User.find_by(id: params[:id])
+    unless @user 
+      render json: {error: 'User does not exist'}, status: 404
+    end
+  end
 
   def user_params
     params.require(:user).permit(:email, :name, :age, :location, :noOfComplaintsMade)

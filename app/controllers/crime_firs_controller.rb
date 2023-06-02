@@ -1,6 +1,6 @@
 class CrimeFirsController < ApplicationController
   before_action :authenticate_user_login!
-  before_action :set_complaint, only: %i[ show edit update destroy ]
+  before_action :set_crimefir, only: %i[ show edit update destroy ]
   before_action :check_for_messages
 
   def index
@@ -108,7 +108,7 @@ class CrimeFirsController < ApplicationController
 
   private
 
-  def set_complaint
+  def set_crimefir
     @crime_fir = CrimeFir.find_by(id: params[:id])
     unless @crime_fir 
       redirect_user("Invalid FIR Id")

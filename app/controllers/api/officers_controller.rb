@@ -1,4 +1,5 @@
 class Api::OfficersController < Api::ApiController 
+  before_action :set_officer, only: %i[ show edit update destroy ]
 
   # GET /officers
   def index
@@ -7,10 +8,10 @@ class Api::OfficersController < Api::ApiController
       if @officers && @officers.size>=1
         render json: @officers, status: 200
       else
-        render json: {error: 'Officer Not Found'}, status: 204
+        render json: {error: 'Officer Not Found'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -21,10 +22,10 @@ class Api::OfficersController < Api::ApiController
       if @officer 
         render json: @officer, status: 200
       else
-        render json: {error: 'Officer Not Found'}, status: 204
+        render json: {error: 'Officer Not Found'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -38,7 +39,7 @@ class Api::OfficersController < Api::ApiController
         render json: 'You Have Not Received Any Request Messages', status: 204
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -50,10 +51,10 @@ class Api::OfficersController < Api::ApiController
       if @login.save && @officer.save
         render json: @officer, status: 200
       else
-        render json: {error: @login.errors.full_messages}, status: 403
+        render json: {error: @login.errors.full_messages}, status: 400
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -78,16 +79,16 @@ class Api::OfficersController < Api::ApiController
           if @officer.save
             render json: @officer, status: 200
           else
-            render json: {error: @login.errors.full_messages}, status: 403
+            render json: {error: @login.errors.full_messages}, status: 204
           end
         else
-          render json: {error: 'Officer does not exist'}, status: 204
+          render json: {error: 'Officer does not exist'}, status: 404
         end
       else
-        render json: {error: 'Email ID cannot be changed'}, status: 403
+        render json: {error: 'Email ID cannot be changed'}, status: 400
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
@@ -99,19 +100,26 @@ class Api::OfficersController < Api::ApiController
         if @officer.destroy
           render json: { message: "Officer deleted successfully" } , status: 200
         else
-          render json: {error: @officer.errors.full_messages} , status: 403
+          render json: {error: @officer.errors.full_messages} , status: 204
 
         end
       else
-        render json: {error: 'Officer does not exist'}, status: 204
+        render json: {error: 'Officer does not exist'}, status: 404
       end
     else
-      render json: {error: 'Restricted Access'}, status: 401
+      render json: {error: 'Restricted Access'}, status: 403
     end
   end
 
 
   private
+
+  def set_officer
+    @officer = Officer.find_by(id: params[:id])
+    unless @officer 
+      render json: {error: 'Officer does not exist'}, status: 404
+    end
+  end
   
     def officer_params
       params.require(:officer).permit(:email, :name, :age, :location, :role)
