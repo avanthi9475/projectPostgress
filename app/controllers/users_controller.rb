@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   # POST /users
   def create
     @user = User.new(user_params)
-    @login = UserLogin.new(login_params)
+    @login = UserLogin.new(email: params[:user][:email], password: params[:user][:password], role: 'user', confirmed_at:Time.current)
     respond_to do |format|
       if @user.save && @login.save
         format.html { redirect_to user_url(@user), notice: "User was successfully created." }

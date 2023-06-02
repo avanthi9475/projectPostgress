@@ -8,13 +8,14 @@ class UserLogins::RegistrationsController < Devise::RegistrationsController
 
     protected
 
-    def after_sign_up_path_for(resource)
+    def after_inactive_sign_up_path_for(resource)
         @user = User.new(user_params)
-        if @user.save
-            set_current_user()
-            user_path(Current.user.id)
-        end
-    end
+        @user.save
+        p '************************************'
+        p @user.errors.full_messages
+        p '************************************'
+        new_user_login_session_path
+    end 
 
     def after_sign_out_path_for(resource_or_scope)
         new_user_session_path

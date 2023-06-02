@@ -45,7 +45,7 @@ class Api::UsersController < Api::ApiController
     if current_user.present? && current_userlogin.present?
       if params[:role]=='user'
         @user = User.new(user_params)
-        @login = UserLogin.new(email: params[:email], role: params[:role], password: params[:password])
+        @login = UserLogin.new(email: params[:email], role: params[:role], password: params[:password], confirmed_at:Time.current)
         if @login.save && @user.save
           render json: @user, status: 200
         else

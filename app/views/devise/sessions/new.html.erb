@@ -23,9 +23,13 @@
   </div>
 
   <div class="actions d-flex pt-4 justify-content-between">
-  <p class="fs-6">Don't Have an account: <%= link_to 'Sign Up', new_user_login_registration_path %></p>
-  <p class="fs-6">Forgot Password: <%= link_to 'Reset Password', new_user_login_password_path %></p>
+    <p class="fs-6">Don't Have an account: <%= link_to 'Sign Up', new_user_login_registration_path %></p>
+    <p class="fs-6">Forgot Password: <%= link_to 'Reset Password', new_user_login_password_path %></p>
   </div>
+
+   <div class="actions d-flex justify-content-center">
+   <p class="fs-6">Didn't receive confirmation instructions? <%= link_to 'Resend Email', new_confirmation_path(resource_name) %></p>
+   </div>
 <% end %>
 
 

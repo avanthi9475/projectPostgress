@@ -46,7 +46,7 @@ class Api::OfficersController < Api::ApiController
   def create
     if current_user.present? && current_user.role=='officer' && current_userlogin.present? && current_userlogin.role=='DSP'
       @officer = Officer.new(officer_params)      
-      @login = UserLogin.new(email: params[:email], password: params[:password], role: 'officer')
+      @login = UserLogin.new(email: params[:email], password: params[:password], role: 'officer',  confirmed_at:Time.current)
       if @login.save && @officer.save
         render json: @officer, status: 200
       else

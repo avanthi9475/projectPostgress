@@ -49,7 +49,7 @@ class OfficersController < ApplicationController
   def create
     if current_user_login.role=='officer' && Current.user.role=='DSP'
       @officer = Officer.new(officer_params)
-      @login = UserLogin.new(email: params[:officer][:email], password: params[:officer][:password], role: 'officer')
+      @login = UserLogin.new(email: params[:officer][:email], password: params[:officer][:password], role: 'officer', confirmed_at:Time.current)
       respond_to do |format|
         if @officer.save && @login.save
           format.html { redirect_to officer_url(@officer), notice: "Officer was successfully created." }

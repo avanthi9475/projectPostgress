@@ -62,7 +62,7 @@ belongs_to :complaint, foreign_key: 'complaint_id'
     
 # when responded/resolved view history for complaints & messages
 # when resolved diable edit options
-mail catcher
+# mail catcher
 # user name also included
 # live messages
 # add crime_fir in active admin
