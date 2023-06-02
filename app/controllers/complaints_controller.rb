@@ -6,9 +6,11 @@ class ComplaintsController < ApplicationController
   # GET /complaints
   def index
     if current_user_login.role=='officer' && Current.user.role=='DSP'
-      @complaints = Complaint.all
+      sort_order = %w(Registered Inprogress Resolved)
+      @complaints = Complaint.all.sort_by{ |complaint| sort_order.index(complaint.status ? complaint.status.status : 'Registered') }
     elsif current_user_login.role=='officer'
-      @complaints = Current.user.complaints
+      sort_order = %w(Registered Inprogress Resolved)
+      @complaints = Current.user.complaints.sort_by{ |complaint| sort_order.index(complaint.status ? complaint.status.status : 'Registered') }
     elsif current_user_login.role=='user'
       redirect_user("Unauthorized Access")
     end
@@ -25,8 +27,9 @@ class ComplaintsController < ApplicationController
 
   def mycomplaints
     if current_user_login.role=='user'
+      sort_order = %w(Registered Inprogress Resolved)
       @user = User.find_by(id: Current.user.id)
-      @complaints = @user.complaints
+      @complaints = @user.complaints.sort_by{ |complaint| sort_order.index(complaint.status ? complaint.status.status : 'Registered') }
     else
       redirect_user("Unauthorized Access")
     end
@@ -55,6 +58,12 @@ class ComplaintsController < ApplicationController
       flash[:alert] = @complaint.error.full_messages
       redirect_to "/handledByOfficer/#{params[:complaint_id]}"
     end 
+  end
+
+  def complaint_history
+    @complaint = Complaint.find_by(id: params[:id])
+    @officers = @complaint.officers
+    @messages = @complaint.messages.where(message_type: 'User')
   end
 
   def make_head

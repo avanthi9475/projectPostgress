@@ -1,4 +1,4 @@
- <nav class="navbar navbar-expand-sm navbar-custom" style="background-color: #94e5ff; height: 70px; ">
+ <nav class="navbar navbar-expand-sm navbar-custom position-sticky top-0" style="background-color: #94e5ff; height: 70px; z-index: 100;">
     <div class="container-fluid mx-5">
       <a class="navbar-brand" href="#">Crime Record Management System</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -16,7 +16,7 @@
             <% end %>
           </li>
           <li class="nav-item">
-            <%= link_to 'Sign Out', destroy_user_login_session_path, method: :delete, class: 'nav-link fs-5 px-3' %>
+            <%= link_to 'Sign Out', destroy_user_login_session_path, method: :delete, data: { confirm: 'Do you want to signout' } , class: 'nav-link fs-5 px-3' %>
           </li>
         </ul>
       </div>

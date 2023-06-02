@@ -22,17 +22,31 @@
               <td class="p-4 fs-6"><%= complaint.location %></td>
               <td class="p-4 fs-6"><% if complaint.status %><%= complaint.status.status %><% else %><%= "Registered" %><% end %></td>
               <td class="p-4 fs-6"><%= complaint.dateTime %></td>
-              <td class="p-4"><a href="handledByOfficer/<%= complaint.id %>"><i class="icon fa-solid fa-user-nurse fa-2xl" data-toggle="tooltip" data-placement="top" title="Governed By"></i></a></td>
-             <% if current_user_login.role=='user'%>
-                <td class="p-4"><%= link_to new_message_path(complaint_id: complaint.id) do %>
-                      <i class="icon fa-solid fa-paper-plane fa-2xl" data-toggle="tooltip" data-placement="top" title="Make Request"></i>
+              <% if (complaint.status && complaint.status.status == 'Resolved')%>
+                <td class="p-4 fs-6"><%= link_to "/complaintHistory/#{complaint.id}" do %>
+                      <i class="icon fa-solid fa-clock-rotate-left fa-xl" data-toggle="tooltip" data-placement="top" title="View History"></i>
+                    <% end %>
+                </td>  
+                <td></td>
+                <td></td>
+                <td></td>
+              <% else %>
+                <td class="p-4"><a href="handledByOfficer/<%= complaint.id %>"><i class="icon fa-solid fa-user-nurse fa-2xl" data-toggle="tooltip" data-placement="top" title="Governed By"></i></a></td>
+                <% if current_user_login.role=='user'%>
+                  <td class="p-4"><%= link_to new_message_path(complaint_id: complaint.id) do %>
+                        <i class="icon fa-solid fa-paper-plane fa-2xl" data-toggle="tooltip" data-placement="top" title="Make Request"></i>
+                      <% end %>
+                  </td>
+                <% end %>
+                <td class="p-4 fs-6"><%= link_to edit_complaint_path(complaint) do %>
+                      <i class="icon fa-solid fa-pen-to-square fa-xl" data-toggle="tooltip" data-placement="top" title="Edit"></i>
                     <% end %>
                 </td>
-              <% end %>
-              <td class="p-4 fs-6"><%= link_to edit_complaint_path(complaint) do %>
-                    <i class="icon fa-solid fa-pen-to-square fa-xl" data-toggle="tooltip" data-placement="top" title="Edit"></i>
+                <td class="p-4 fs-6"><%= link_to "/complaintHistory/#{complaint.id}" do %>
+                  <i class="icon fa-solid fa-clock-rotate-left fa-xl" data-toggle="tooltip" data-placement="top" title="View History"></i>
                   <% end %>
-              </td>
+                </td>  
+              <% end %>
             </tr>
           <% end %>
         </tbody>

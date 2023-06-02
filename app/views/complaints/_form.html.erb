@@ -24,12 +24,12 @@
 
   <div class="form-group p-2">
     <label class= "form-label fw-bold fs-5 py-2" for="statement">Statement</label>
-    <input class="form-control shadow shadow-sm"  type="text" name="complaint[statement]" value=<%= complaint.statement%> >
+    <input class="form-control shadow shadow-sm"  type="text" name="complaint[statement]" value="<%= complaint.statement %>" >
   </div>
 
   <div class="form-group p-2">
     <label class= "form-label fw-bold fs-5 py-2" for="location">Location</label>
-    <input class="form-control shadow shadow-sm"  type="text" name="complaint[location]" value=<%= complaint.location%> >
+    <input class="form-control shadow shadow-sm"  type="text" name="complaint[location]" value="<%= complaint.location %>" >
   </div>
   
   <div class="form-group p-2">
@@ -38,6 +38,11 @@
   </div>
 
   <div class="actions form-group d-flex justify-content-center py-4">
-    <%= form.submit "Submit", class: "btn btn-secondary shadow shadow-sm"%>
+    <%= form.submit "Submit", class: "btn btn-secondary shadow shadow-sm mx-2"%>
+     <% if current_user_login.role=='officer' %>
+      <%= link_to 'Back', complaints_path, class: "btn btn-secondary text-light btn-lg mx-2"%>
+    <% else %>
+      <%= link_to 'Back', viewMyComplaints_path , class: "btn btn-secondary text-light btn-lg mx-2"%>
+    <% end %>
   </div>
 <% end %>

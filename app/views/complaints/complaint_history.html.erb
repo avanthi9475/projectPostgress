@@ -1,0 +1,71 @@
+<div class="mt-5">
+  <h1 class="d-flex flex-row fw-bold justify-content-center pt-4">Complaint History</h1>
+  <div class="border border-sm rounded m-5 p-5">
+    <h1 class="d-flex flex-row fs-3 p-4"><b>Handled By Officers : </b></h1>
+    <div class="px-5 mx-5">
+      <table class="table table-responsive table-striped">
+        <thead class="thead-dark bg-dark text-light align-text-center">
+          <tr>
+            <th class="p-4 fs-5">Officer Name</th>
+            <th class="p-4 fs-5">Officer Role</th>
+            <th class="p-4 fs-5">Head</th>
+          </tr>
+        </thead>
+
+         <tbody>
+          <% @officers.each do |officer| %>
+            <tr>
+              <td class="p-4 fs-6"><%= officer.name %></td>
+              <td class="p-4 fs-6"><%= officer.role %></td>
+              <td class="p-4 fs-6"><%= officer.is_head_for_complaint(params[:id], officer.id) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+
+      </table>
+    </div>  
+    <% if @messages.size>=1 %>
+      <h1 class="d-flex flex-row fs-3 p-4"><b>History Of Messages : </b></h1>
+      <div class="px-4 mx-4">
+        <table class="table table-responsive table-striped">
+          <tbody>
+          <% @messages.each do |message| %>
+            <% if message.response!=nil %>
+              <tr>
+                <div class="float-start">
+                  <p class="badge rounded-pill bg-dark text-dark p-3 fs-6 bg-opacity-10 text-capitalize fw-normal"><%= message.statement %></p>
+                  <p class="text-end"><%= User.find_by(id: message.message_id).name %>(<%= message.created_at.to_date %>)</p>
+                </div>
+              </tr><br>
+              <tr>
+                <div class="float-end">
+                  <p class="badge rounded-pill bg-info text-dark p-3 fs-6 bg-opacity-25 text-capitalize fw-normal"><%= message.response.statement %></p>
+                  <p class="text-end"><%= Officer.find_by(id: message.response.message_id).name %>(<%= message.response.created_at.to_date %>)</p>
+                </div>
+              </tr><br>
+            <% end %>
+          <% end %>
+          </tbody>
+
+        </table>
+      </div>
+    <% end %>
+    <div class="mt-5">
+     <h5><b>Registered Date :</b> <%= @complaint.created_at %></h5>
+      <% if @complaint.status && @complaint.status.status == 'Resolved'%>
+        <h5><b>Closure Date :</b> <%= @complaint.status.updated_at %></h5>
+      <% elsif @complaint.status.nil? %>
+        <h5><b>Current Status :</b>Registered</h5>
+      <% else %>        
+        <h5><b>Current Status :</b> <%= @complaint.status.status %></h5>
+      <% end %> 
+    </div>
+    <div class="d-flex pt-4 justify-content-center">
+    <% if current_user_login.role=='officer' %>
+      <%= link_to 'Back', complaints_path, class: "btn btn-secondary text-light btn-lg"%>
+    <% else %>
+      <%= link_to 'Back', viewMyComplaints_path , class: "btn btn-secondary text-light btn-lg"%>
+    <% end %>
+    </div>
+  </div>
+</div>

@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   post  "/remove_officer/:id" => "complaints#remove_officer"
 
   post "/make_as_lead/:id" => "complaints#make_head"
+
+  get '/complaintHistory/:id' => "complaints#complaint_history"
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
   scope :api do
