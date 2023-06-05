@@ -31,12 +31,12 @@ class Api::OfficersController < Api::ApiController
 
   def viewRequestMsg
     if current_user.present? && current_user.role=='officer' && current_userlogin.present?
-      @messages =  current_userlogin.request_messages 
-      @messages = @messages.select { |msg| msg.status.status == "Pending" }                                                                                                        
+      @messages =  current_userlogin.request_messages
+      @messages = @messages.select { |msg| msg.status.status == "Pending" || msg.status.status == "Sent"}                                                                                                        
       if @messages && @messages.size>=1
         render json: @messages, status: 200
       else
-        render json: 'You Have Not Received Any Request Messages', status: 204
+        render json: {error: 'You Have Not Received Any Request Messages'}, status: 204
       end
     else
       render json: {error: 'Restricted Access'}, status: 403

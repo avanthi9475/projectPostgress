@@ -51,9 +51,9 @@
       </div>
     <% end %>
     <div class="mt-5">
-     <h5><b>Registered Date :</b> <%= @complaint.created_at %></h5>
+     <h5><b>Registered Date :</b> <%= @complaint.created_at.strftime('%B %d - %Y, %I:%M %p')   %></h5>
       <% if @complaint.status && @complaint.status.status == 'Resolved'%>
-        <h5><b>Closure Date :</b> <%= @complaint.status.updated_at %></h5>
+        <h5><b>Closure Date :</b> <%= @complaint.status.updated_at.strftime('%B %d - %Y, %I:%M %p') %></h5>
       <% elsif @complaint.status.nil? %>
         <h5><b>Current Status :</b>Registered</h5>
       <% else %>        

@@ -8,7 +8,7 @@ class UserLogin < ApplicationRecord
     user = UserLogin.find_for_authentication(email: email)
     user&.valid_password?(password) ? user : nil
   end
-
+  
   validates :email, format: URI::MailTo::EMAIL_REGEXP
   validates :role, presence: true
 

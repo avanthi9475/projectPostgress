@@ -21,7 +21,7 @@ ActiveAdmin.register Status do
         'Response Message Status'
       elsif status.statusable_type=='Message' && (status.status=='Pending' || status.status=='Responded')
         'Request Message Status'
-      elsif status.statusable_type=='Complaint'
+      elsif status.statusable_type=='CrimeFir'
         'Complaint Status'
       end
     end

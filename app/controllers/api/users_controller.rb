@@ -34,7 +34,7 @@ class Api::UsersController < Api::ApiController
       if @messages && @messages.size>=1
         render json: @messages, status: 200
       else
-        render json: 'You Have Not Received Any Respond Messages', status: 204
+        render json: {error: 'You Have Not Received Any Respond Messages'}, status: 204
       end
     else
       render json: {error: 'Restricted Access'}, status: 403

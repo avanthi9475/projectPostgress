@@ -5,7 +5,7 @@ class Status < ApplicationRecord
 
     validates :status, presence: true
     
-    scope :complaint_statuses, ->{Status.where(statuses: {statusable_type: 'Complaint'})}
+    scope :complaint_statuses, ->{Status.where(statuses: {statusable_type: 'CrimeFir'})}
     scope :request_message_statuses, ->{Status.where(statuses: {statusable_type: 'Message'}).where(statuses: {status: ['Pending','Responded']})}
     scope :response_messages_statuses, ->{Status.where(statuses: {statusable_type: 'Message'}).where(statuses: {status: ['Sent','Received']})}
 end

@@ -20,7 +20,7 @@
 
        <tr>
           <td class="p-4 fs-4 fw-bold">Datetime of crime:</td>
-          <td class="p-4 fs-4"><%= @crime_fir.dateTime_of_crime %></td>
+          <td class="p-4 fs-4"><%= @crime_fir.dateTime_of_crime.strftime('%B %d - %Y, %I:%M %p') %></td>
         </tr>
 
        <tr>

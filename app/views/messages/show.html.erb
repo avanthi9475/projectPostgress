@@ -28,7 +28,7 @@
 
         <tr>
           <td class="p-4 fs-4 fw-bold">Datetime:</td>
-          <td class="p-4 fs-4"><%= @message.dateTime %></td>
+          <td class="p-4 fs-4"><%= @message.dateTime.strftime('%B %d - %Y, %I:%M %p') %></td>
         </tr>
       </table>
       <div class="d-flex pt-4 justify-content-center">

@@ -22,7 +22,7 @@
               <td class="p-4 fs-6"><%= message.complaint.user.name %></td>
               <td class="p-4 fs-6"><%= message.complaint_id %></td>
               <td class="p-4 fs-6"><%= message.statement %></td>
-              <td class="p-4 fs-6"><%= message.dateTime %></td>
+              <td class="p-4 fs-6"><%= message.dateTime.strftime('%B %d - %Y, %I:%M %p') %></td>
               <% if @message && @message.message_type=="User" %>
                 <td class="p-4 fs-6"><%= message.status.status %></td>
               <% end %>

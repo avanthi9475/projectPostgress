@@ -20,7 +20,7 @@
               <td class="p-4 fs-6"><%= crime_fir.user.name %></td>
               <td class="p-4 fs-6"><%= crime_fir.under_section %></td>
               <td class="p-4 fs-6"><%= crime_fir.crime_category %></td>
-              <td class="p-4 fs-6"><%= crime_fir.dateTime_of_crime %></td>
+              <td class="p-4 fs-6"><%= crime_fir.dateTime_of_crime.strftime('%B %d - %Y, %I:%M %p') %></td>
               <td class="p-4 fs-6"><% if crime_fir.status %><%= crime_fir.status.status %><% end %></td>
               <td class="p-4 fs-6"><%= link_to 'Show', crime_fir %></td>
               <td class="p-4 fs-6"><%= link_to 'Edit', edit_crime_fir_path(crime_fir) %></td>

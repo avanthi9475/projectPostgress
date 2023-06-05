@@ -21,7 +21,7 @@
               <td class="p-4 fs-6"><%= complaint.statement %></td>
               <td class="p-4 fs-6"><%= complaint.location %></td>
               <td class="p-4 fs-6"><% if complaint.status %><%= complaint.status.status %><% else %><%= "Registered" %><% end %></td>
-              <td class="p-4 fs-6"><%= complaint.dateTime %></td>
+              <td class="p-4 fs-6"><%= complaint.dateTime.strftime('%B %d - %Y, %I:%M %p')  %></td>
               <% if (complaint.status && complaint.status.status == 'Resolved')%>
                 <td class="p-4 fs-6"><%= link_to "/complaintHistory/#{complaint.id}" do %>
                       <i class="icon fa-solid fa-clock-rotate-left fa-xl" data-toggle="tooltip" data-placement="top" title="View History"></i>
